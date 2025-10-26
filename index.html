@@ -1,110 +1,1217 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>IMS - تفعيل الأرقام</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AB - تفعيل الأرقام</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-red: #e74c3c;
+            --primary-blue: #3498db;
+            --dark-bg: #1a1a1a;
+            --dark-card: #2d2d2d;
+            --dark-text: #f5f5f5;
+            --light-bg: #f5f5f5;
+            --light-card: #ffffff;
+            --light-text: #333333;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--light-text);
+            transition: var(--transition);
+        }
+
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary-red), var(--primary-blue));
+            padding: 20px 0;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .logo-text {
+            font-size: 4rem;
+            font-weight: 900;
+            display: flex;
+        }
+
+        .logo-a {
+            color: var(--primary-red);
+            text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        .logo-b {
+            color: var(--primary-blue);
+            text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+            animation: pulse 2s infinite 0.5s;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-icon {
+            background-color: rgba(255, 255, 255, 0.2);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-icon:hover {
+            transform: translateY(-5px);
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--primary-red);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Main Content */
+        .hero {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            padding: 60px 0;
+            gap: 40px;
+        }
+
+        .hero-image {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .hero-content {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .hero-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary-red), var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .feature-card {
+            background-color: var(--light-card);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        body.dark-mode .feature-card {
+            background-color: var(--dark-card);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--primary-blue);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: var(--light-card);
+            border-radius: 10px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+            position: relative;
+            animation: slideUp 0.3s ease;
+        }
+
+        body.dark-mode .modal-content {
+            background-color: var(--dark-card);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary-red);
+        }
+
+        .modal h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        body.dark-mode .form-group input, 
+        body.dark-mode .form-group textarea, 
+        body.dark-mode .form-group select {
+            background-color: #3d3d3d;
+            border-color: #555;
+            color: var(--dark-text);
+        }
+
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, var(--primary-red), var(--primary-blue));
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        /* Success Animation */
+        .success-animation {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .success-animation i {
+            font-size: 4rem;
+            color: #2ecc71;
+            margin-bottom: 20px;
+            animation: bounce 1s ease;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+
+        /* Chat Widget */
+        .chat-widget {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 999;
+        }
+
+        .chat-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-red), var(--primary-blue));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            animation: pulse 2s infinite;
+        }
+
+        .chat-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-icon i {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .chat-box {
+            position: absolute;
+            bottom: 70px;
+            left: 0;
+            width: 300px;
+            background-color: var(--light-card);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            display: none;
+            overflow: hidden;
+        }
+
+        body.dark-mode .chat-box {
+            background-color: var(--dark-card);
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--primary-red), var(--primary-blue));
+            color: white;
+            padding: 15px;
+            font-weight: 600;
+        }
+
+        .chat-messages {
+            padding: 15px;
+            height: 200px;
+            overflow-y: auto;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        body.dark-mode .chat-input {
+            border-top-color: #444;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        body.dark-mode .chat-input input {
+            background-color: #3d3d3d;
+            border-color: #555;
+            color: var(--dark-text);
+        }
+
+        .chat-input button {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            background-color: var(--light-card);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            box-shadow: var(--shadow);
+            display: none;
+        }
+
+        body.dark-mode .admin-panel {
+            background-color: var(--dark-card);
+        }
+
+        .admin-panel h2 {
+            margin-bottom: 20px;
+            color: var(--primary-red);
+        }
+
+        .requests-list {
+            margin-bottom: 30px;
+        }
+
+        .request-item {
+            background-color: rgba(0, 0, 0, 0.05);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        body.dark-mode .request-item {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .request-actions button {
+            margin-left: 10px;
+        }
+
+        .admin-message-form {
+            margin-top: 30px;
+        }
+
+        /* Login Modal */
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-content {
+            background-color: var(--light-card);
+            border-radius: 10px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        body.dark-mode .login-content {
+            background-color: var(--dark-card);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header .logo-text {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--light-card);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            z-index: 999;
+            transition: var(--transition);
+        }
+
+        body.dark-mode .theme-toggle {
+            background-color: var(--dark-card);
+        }
+
+        /* Admin Login Button */
+        .admin-login-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, var(--primary-red), var(--primary-blue));
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-weight: 600;
+            z-index: 999;
+            box-shadow: var(--shadow);
+        }
+
+        /* Server Data Display */
+        .server-data {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .server-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .server-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo-text {
+                font-size: 3rem;
+            }
+            
+            .hero {
+                padding: 40px 0;
+            }
+            
+            .chat-box {
+                width: 280px;
+                left: -130px;
+            }
+            
+            .admin-login-btn {
+                top: 80px;
+            }
+        }
+    </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
-  <div class="container">
-    <a class="navbar-brand d-flex align-items-center" href="#main-hero">
-      <img src="https://imssms.org/assets/images/logo.png" alt="IMS" height="40" class="me-2">
-      <span class="brand-text">IMS</span>
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navCollapse">
-      <span class="navbar-toggler-icon"></span>
+    <!-- Admin Login Button -->
+    <button class="admin-login-btn" id="adminLoginBtn">
+        <i class="fas fa-sign-in-alt"></i> دخول الأدمن
     </button>
-    <div class="collapse navbar-collapse" id="navCollapse">
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" href="#section-numbers">طلب الأرقام</a></li>
-        <li class="nav-item"><a class="nav-link" href="#section-user">عمل يوزر</a></li>
-        <li class="nav-item"><a class="nav-link" href="#about">عن الخدمة</a></li>
-        <li class="nav-item"><a class="btn btn-sm btn-primary ms-2" href="/login">Login</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
 
-<!-- Main hero / primary section at top with professional explanation and effects -->
-<header id="main-hero" class="hero-hero d-flex align-items-center">
-  <div class="overlay"></div>
-  <div class="container text-center hero-content">
-    <h1 class="display-4 hero-title">خدمة احترافية لتفعيل الأرقام وفحص جودتها</h1>
-    <p class="lead hero-sub">نرسل رسائل تحقق خفيفة على أرقام تابعة لشركات الاتصالات للتأكد من أنها شغالة وبجودة عالية — خدمة مُدارة، آمنة، وقابلة للتكرار في أي وقت.</p>
-    <div class="hero-features row justify-content-center mt-4 gx-3">
-      <div class="col-md-3 feature-card">
-        <strong>سهل وموثوق</strong>
-        <p class="small text-muted">اختبار سريع للأرقام بدون تعقيد.</p>
-      </div>
-      <div class="col-md-3 feature-card">
-        <strong>رسائل خفيفة</strong>
-        <p class="small text-muted">نرسل رسائل قصيرة لا تؤدي لحظر الأرقام.</p>
-      </div>
-      <div class="col-md-3 feature-card">
-        <strong>محفوظ ومرن</strong>
-        <p class="small text-muted">قاعدة بيانات محلية لحفظ الطلبات والدول.</p>
-      </div>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
     </div>
-    <div class="mt-4">
-      <a href="#section-numbers" class="btn btn-lg btn-warning me-2">اطلب الآن</a>
-      <a href="#about" class="btn btn-outline-light">المزيد عن الخدمة</a>
-    </div>
-  </div>
-</header>
 
-<main class="container my-5">
-  <!-- Section: طلب الأرقام (top) -->
-  <section id="section-numbers" class="mt-5 p-4 section-animated">
-    <div class="row align-items-start">
-      <div class="col-lg-4">
-        <div class="bg-cover p-4 rounded" style="background-image:url('https://imssms.org/assets/images/5.png');min-height:220px">
-          <h3 class="text-white">قسم طلب الأرقام</h3>
-          <p class="text-white-50">اختر الدولة، الرينج (إن وجد)، ثم العدد واضغط طلب.</p>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <div class="logo-text">
+                    <span class="logo-a">A</span>
+                    <span class="logo-b">B</span>
+                </div>
+            </div>
+            <nav>
+                <div class="nav-icons">
+                    <div class="nav-icon" id="accountIcon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="nav-icon" id="numbersIcon">
+                        <i class="fas fa-list"></i>
+                    </div>
+                    <div class="nav-icon" id="notificationIcon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notificationBadge">3</span>
+                    </div>
+                </div>
+            </nav>
         </div>
-      </div>
-      <div class="col-lg-8">
-        <div id="countriesGrid" class="country-grid"></div>
-      </div>
-    </div>
-  </section>
+    </header>
 
-  <!-- Section: عمل يوزر -->
-  <section id="section-user" class="mt-5 p-4 section-animated">
-    <div class="row align-items-start">
-      <div class="col-lg-4">
-        <div class="bg-cover p-4 rounded" style="background-image:url('https://imssms.org/assets/images/5.png');min-height:220px">
-          <h3 class="text-white">قسم عمل يوزر</h3>
-          <p class="text-white-50">أدخل اسم ثنائي إنجليزي ورقم واتساب لعمل يوزر جاهز.</p>
+    <!-- Main Content -->
+    <main class="container">
+        <section class="hero">
+            <div class="hero-image">
+                <img src="https://imssms.org/assets/images/5.png" alt="خدمات تفعيل الأرقام" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNjY3ZWVhIi8+CiAgPHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj7Yp9mE2YXYs9in2KEg2KfZhNi52YbYr9ipINin2YTYqtmK2YYg2KfZhNmF2KfZh9ivPC90ZXh0Pgo8L3N2Zz4K'">
+            </div>
+            <div class="hero-content">
+                <h2>تفعيل الأرقام لجميع التطبيقات</h2>
+                <p>
+                    شغلنا عبارة عن أرقام بنحطها لك في المنصة، وانت بتاخد الأرقام وبتروح تفعلها في التطبيقات والموكان. 
+                    الهدف تجربة الأرقام ونشوفها شغالة وهكذا. نحن نقدم خدمة موثوقة وسريعة لتفعيل حساباتك على مختلف المنصات.
+                </p>
+                <button class="btn" id="learnMoreBtn">اعرف المزيد</button>
+            </div>
+        </section>
+
+        <!-- Server Data Section -->
+        <section class="server-data">
+            <h2><i class="fas fa-server"></i> بيانات السيرفر</h2>
+            <div class="server-info">
+                <div class="server-item">
+                    <h3>الحالة</h3>
+                    <p><i class="fas fa-circle" style="color: #2ecc71;"></i> نشط</p>
+                </div>
+                <div class="server-item">
+                    <h3>المستخدمون النشطون</h3>
+                    <p>1,247</p>
+                </div>
+                <div class="server-item">
+                    <h3>الطلبات اليوم</h3>
+                    <p>89</p>
+                </div>
+                <div class="server-item">
+                    <h3>معدل النجاح</h3>
+                    <p>98.7%</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>خدمة سريعة</h3>
+                <p>نوفر أرقام تفعيل فورية لأهم التطبيقات والمنصات</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>آمن وموثوق</h3>
+                <p>جميع الأرقام مضمونة وتعمل بشكل صحيح</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h3>دعم فني</h3>
+                <p>فريق دعم فني متاح لمساعدتك على مدار الساعة</p>
+            </div>
+        </section>
+
+        <!-- Admin Panel (Visible only after login) -->
+        <section class="admin-panel" id="adminPanel">
+            <h2><i class="fas fa-cogs"></i> لوحة التحكم</h2>
+            
+            <div class="requests-list">
+                <h3>طلبات جديدة</h3>
+                <div id="requestsContainer">
+                    <!-- Requests will be loaded here -->
+                </div>
+            </div>
+            
+            <div class="admin-message-form">
+                <h3>إرسال رسالة للمستخدمين</h3>
+                <div class="form-group">
+                    <textarea id="adminMessage" rows="3" placeholder="اكتب رسالة للمستخدمين..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>تاريخ الإرسال:</label>
+                    <input type="datetime-local" id="messageSchedule">
+                </div>
+                <button class="btn btn-block" id="sendMessageBtn">إرسال الرسالة</button>
+            </div>
+
+            <div style="margin-top: 30px; text-align: center;">
+                <button class="btn" id="logoutBtn" style="background: #e74c3c;">
+                    <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Chat Widget -->
+    <div class="chat-widget">
+        <div class="chat-icon" id="chatIcon">
+            <i class="fas fa-comment-dots"></i>
         </div>
-      </div>
-      <div class="col-lg-8">
-        <div class="card p-4 shadow-sm">
-          <form id="userForm">
-            <div class="mb-2"><label>الاسم بالإنجليزي (First Last)</label><input id="u_name" class="form-control" required></div>
-            <div class="mb-2"><label>رقم واتساب</label><input id="u_whatsapp" class="form-control" required></div>
-            <button class="btn btn-primary">طلب يوزر</button>
-            <div id="userResult" class="mt-2 text-success"></div>
-          </form>
+        <div class="chat-box" id="chatBox">
+            <div class="chat-header">
+                🌟 مرحبًا بكم في الدعم AB
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message" style="margin-bottom: 10px; padding: 8px; background: #f1f1f1; border-radius: 5px;">
+                    📲 تفعيل أرقام لجميع التطبيقات<br>
+                    💬 هل تواجه مشكلة في تفعيل الأرقام على التطبيقات؟ لا تقلق نحن هنا للمساعدة ✅
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="اكتب رسالتك...">
+                <button id="sendChatBtn"><i class="fas fa-paper-plane"></i></button>
+            </div>
         </div>
-      </div>
     </div>
-  </section>
 
-  <!-- Section: شرح الخدمة -->
-  <section id="about" class="about mt-5 p-4 card shadow-sm section-animated">
-    <h4>عن الخدمة</h4>
-    <p class="text-muted">الشغل عبارة عن طلب رسائل تحقق على أرقام تابعة لشركات اتصالات بحيث نتأكد أن الأرقام شغالة وجودتها. نطلب رسائل بسيطة وآمنة بحيث لا توقف الأرقام عن العمل. كل التفاصيل واضحة — استخدم الواجهة لطلب الأرقام أو اليوزر، وأي استفسار تواصل عبر الواتساب.</p>
-    <p>رابط موقع المنصة: <a href="https://imssms.org/login" target="_blank">https://imssms.org/login</a></p>
-    <p>للتواصل واتساب فقط عبر رقم: <strong>أدخل رقم واتساب هنا</strong></p>
-  </section>
+    <!-- Account Modal -->
+    <div class="modal" id="accountModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeAccountModal">&times;</span>
+            <h2><i class="fas fa-user-plus"></i> إنشاء حساب جديد</h2>
+            <form id="accountForm">
+                <div class="form-group">
+                    <label for="userName">اسمك الثنائي بالإنجليزية</label>
+                    <input type="text" id="userName" required>
+                </div>
+                <div class="form-group">
+                    <label for="userPhone">رقم الواتساب</label>
+                    <input type="tel" id="userPhone" required>
+                </div>
+                <button type="submit" class="btn btn-block">طلب إنشاء حساب</button>
+            </form>
+        </div>
+    </div>
 
-</main>
+    <!-- Numbers Modal -->
+    <div class="modal" id="numbersModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeNumbersModal">&times;</span>
+            <h2><i class="fas fa-list"></i> طلب أرقام</h2>
+            <form id="numbersForm">
+                <div class="form-group">
+                    <label for="country">اسم الدولة</label>
+                    <input type="text" id="country" required>
+                </div>
+                <div class="form-group">
+                    <label for="range">الرينج</label>
+                    <input type="text" id="range" required>
+                </div>
+                <div class="form-group">
+                    <label for="quantity">عدد الأرقام</label>
+                    <input type="number" id="quantity" required>
+                </div>
+                <div class="form-group">
+                    <label for="accountName">اسم حسابك</label>
+                    <input type="text" id="accountName" required>
+                </div>
+                <button type="submit" class="btn btn-block">طلب الأرقام</button>
+            </form>
+        </div>
+    </div>
 
-<script src="/socket.io/socket.io.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/js/client.js"></script>
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="success-animation">
+                <i class="fas fa-check-circle"></i>
+                <h2>تم الإرسال بنجاح!</h2>
+                <p>سيتم مراجعة طلبك قريباً</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Modal -->
+    <div class="modal" id="notificationsModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeNotificationsModal">&times;</span>
+            <h2><i class="fas fa-bell"></i> الإشعارات</h2>
+            <div class="form-group">
+                <p>تفعيل إشعارات الموقع؟</p>
+                <button class="btn btn-block" id="enableNotificationsBtn">تفعيل الإشعارات</button>
+            </div>
+            <div id="notificationsList">
+                <!-- Notifications will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div class="login-modal" id="adminLoginModal">
+        <div class="login-content">
+            <div class="login-header">
+                <div class="logo-text">
+                    <span class="logo-a">A</span>
+                    <span class="logo-b">B</span>
+                </div>
+                <h2>تسجيل دخول الأدمن</h2>
+            </div>
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label for="adminUsername">اسم المستخدم</label>
+                    <input type="text" id="adminUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="adminPassword">كلمة المرور</label>
+                    <input type="password" id="adminPassword" required>
+                </div>
+                <button type="submit" class="btn btn-block">دخول</button>
+            </form>
+            <div style="margin-top: 20px; text-align: center; font-size: 0.9rem; color: #777;">
+                <p>بيانات الدخول: test / test</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // بيانات الاعتماد الثابتة
+        const ADMIN_CREDENTIALS = {
+            username: 'test',
+            password: 'test'
+        };
+
+        // بيانات السيرفر الوهمية
+        const SERVER_DATA = {
+            status: 'active',
+            activeUsers: 1247,
+            dailyRequests: 89,
+            successRate: 98.7,
+            requests: [
+                { id: 1, type: 'account', name: 'محمد أحمد', phone: '+201234567890', date: '2024-01-15' },
+                { id: 2, type: 'numbers', name: 'أحمد خالد', country: 'الولايات المتحدة', quantity: 5, date: '2024-01-15' },
+                { id: 3, type: 'account', name: 'سارة محمد', phone: '+201112223344', date: '2024-01-14' },
+                { id: 4, type: 'numbers', name: 'خالد علي', country: 'المملكة المتحدة', quantity: 3, date: '2024-01-14' }
+            ],
+            notifications: [
+                { id: 1, message: 'طلب جديد: محمد أحمد - إنشاء حساب', time: 'منذ 5 دقائق' },
+                { id: 2, message: 'طلب جديد: أحمد خالد - أرقام (الولايات المتحدة)', time: 'منذ 15 دقيقة' },
+                { id: 3, message: 'تم تفعيل النظام بنجاح', time: 'منذ ساعة' }
+            ]
+        };
+
+        // حالة المستخدم
+        let isAdminLoggedIn = false;
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        });
+
+        // Modal Controls
+        const accountIcon = document.getElementById('accountIcon');
+        const numbersIcon = document.getElementById('numbersIcon');
+        const notificationIcon = document.getElementById('notificationIcon');
+        const accountModal = document.getElementById('accountModal');
+        const numbersModal = document.getElementById('numbersModal');
+        const notificationsModal = document.getElementById('notificationsModal');
+        const successModal = document.getElementById('successModal');
+        const closeAccountModal = document.getElementById('closeAccountModal');
+        const closeNumbersModal = document.getElementById('closeNumbersModal');
+        const closeNotificationsModal = document.getElementById('closeNotificationsModal');
+        const accountForm = document.getElementById('accountForm');
+        const numbersForm = document.getElementById('numbersForm');
+        const enableNotificationsBtn = document.getElementById('enableNotificationsBtn');
+        const chatIcon = document.getElementById('chatIcon');
+        const chatBox = document.getElementById('chatBox');
+        const chatInput = document.getElementById('chatInput');
+        const sendChatBtn = document.getElementById('sendChatBtn');
+        const chatMessages = document.getElementById('chatMessages');
+        const adminPanel = document.getElementById('adminPanel');
+        const sendMessageBtn = document.getElementById('sendMessageBtn');
+        const adminLoginBtn = document.getElementById('adminLoginBtn');
+        const adminLoginModal = document.getElementById('adminLoginModal');
+        const adminLoginForm = document.getElementById('adminLoginForm');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const requestsContainer = document.getElementById('requestsContainer');
+        const notificationsList = document.getElementById('notificationsList');
+
+        // تهيئة البيانات
+        function initializeData() {
+            updateNotifications();
+            updateServerStats();
+        }
+
+        // تحديث الإشعارات
+        function updateNotifications() {
+            notificationsList.innerHTML = '';
+            SERVER_DATA.notifications.forEach(notification => {
+                const notificationElement = document.createElement('div');
+                notificationElement.className = 'request-item';
+                notificationElement.innerHTML = `
+                    <div>
+                        <strong>${notification.message}</strong>
+                        <br><small>${notification.time}</small>
+                    </div>
+                `;
+                notificationsList.appendChild(notificationElement);
+            });
+        }
+
+        // تحديث إحصائيات السيرفر
+        function updateServerStats() {
+            // سيتم تحديث هذه البيانات من السيرفر الحقيقي لاحقاً
+            console.log('Server data loaded:', SERVER_DATA);
+        }
+
+        // Show modals
+        accountIcon.addEventListener('click', () => {
+            accountModal.style.display = 'flex';
+        });
+
+        numbersIcon.addEventListener('click', () => {
+            numbersModal.style.display = 'flex';
+        });
+
+        notificationIcon.addEventListener('click', () => {
+            notificationsModal.style.display = 'flex';
+        });
+
+        // Admin login button
+        adminLoginBtn.addEventListener('click', () => {
+            if (isAdminLoggedIn) {
+                showAdminPanel();
+            } else {
+                adminLoginModal.style.display = 'flex';
+            }
+        });
+
+        // Close modals
+        closeAccountModal.addEventListener('click', () => {
+            accountModal.style.display = 'none';
+        });
+
+        closeNumbersModal.addEventListener('click', () => {
+            numbersModal.style.display = 'none';
+        });
+
+        closeNotificationsModal.addEventListener('click', () => {
+            notificationsModal.style.display = 'none';
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === accountModal) {
+                accountModal.style.display = 'none';
+            }
+            if (e.target === numbersModal) {
+                numbersModal.style.display = 'none';
+            }
+            if (e.target === notificationsModal) {
+                notificationsModal.style.display = 'none';
+            }
+            if (e.target === successModal) {
+                successModal.style.display = 'none';
+            }
+            if (e.target === adminLoginModal) {
+                adminLoginModal.style.display = 'none';
+            }
+        });
+
+        // Admin login form
+        adminLoginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('adminUsername').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+                isAdminLoggedIn = true;
+                adminLoginModal.style.display = 'none';
+                showAdminPanel();
+                adminLoginBtn.innerHTML = '<i class="fas fa-cogs"></i> لوحة التحكم';
+                loadAdminRequests();
+            } else {
+                alert('اسم المستخدم أو كلمة المرور غير صحيحة!');
+            }
+        });
+
+        // Show admin panel
+        function showAdminPanel() {
+            adminPanel.style.display = 'block';
+            adminPanel.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // تحميل طلبات الأدمن
+        function loadAdminRequests() {
+            requestsContainer.innerHTML = '';
+            SERVER_DATA.requests.forEach(request => {
+                const requestElement = document.createElement('div');
+                requestElement.className = 'request-item';
+                requestElement.innerHTML = `
+                    <div>
+                        <strong>${request.name}</strong> - 
+                        ${request.type === 'account' ? 'طلب إنشاء حساب' : `طلب أرقام (${request.country})`}
+                        <br><small>${request.date}</small>
+                    </div>
+                    <div class="request-actions">
+                        <button class="btn accept-btn" style="padding: 5px 10px; background: #2ecc71;">قبول</button>
+                        <button class="btn reject-btn" style="padding: 5px 10px; background: #e74c3c;">رفض</button>
+                    </div>
+                `;
+                requestsContainer.appendChild(requestElement);
+            });
+
+            // إضافة event listeners للأزرار
+            document.querySelectorAll('.accept-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const requestItem = this.closest('.request-item');
+                    alert('تم قبول الطلب بنجاح!');
+                    requestItem.remove();
+                });
+            });
+
+            document.querySelectorAll('.reject-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const requestItem = this.closest('.request-item');
+                    alert('تم رفض الطلب!');
+                    requestItem.remove();
+                });
+            });
+        }
+
+        // Logout functionality
+        logoutBtn.addEventListener('click', () => {
+            isAdminLoggedIn = false;
+            adminPanel.style.display = 'none';
+            adminLoginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> دخول الأدمن';
+            alert('تم تسجيل الخروج بنجاح');
+        });
+
+        // Form submissions
+        accountForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const userName = document.getElementById('userName').value;
+            const userPhone = document.getElementById('userPhone').value;
+            
+            // إضافة الطلب إلى البيانات
+            SERVER_DATA.requests.unshift({
+                id: SERVER_DATA.requests.length + 1,
+                type: 'account',
+                name: userName,
+                phone: userPhone,
+                date: new Date().toISOString().split('T')[0]
+            });
+
+            accountModal.style.display = 'none';
+            successModal.style.display = 'flex';
+            
+            // Reset form
+            accountForm.reset();
+            
+            // Hide success modal after 3 seconds
+            setTimeout(() => {
+                successModal.style.display = 'none';
+            }, 3000);
+        });
+
+        numbersForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const country = document.getElementById('country').value;
+            const range = document.getElementById('range').value;
+            const quantity = document.getElementById('quantity').value;
+            const accountName = document.getElementById('accountName').value;
+            
+            // إضافة الطلب إلى البيانات
+            SERVER_DATA.requests.unshift({
+                id: SERVER_DATA.requests.length + 1,
+                type: 'numbers',
+                name: accountName,
+                country: country,
+                quantity: quantity,
+                date: new Date().toISOString().split('T')[0]
+            });
+
+            numbersModal.style.display = 'none';
+            successModal.style.display = 'flex';
+            
+            // Reset form
+            numbersForm.reset();
+            
+            // Hide success modal after 3 seconds
+            setTimeout(() => {
+                successModal.style.display = 'none';
+            }, 3000);
+        });
+
+        // Notifications
+        enableNotificationsBtn.addEventListener('click', () => {
+            alert('تم تفعيل الإشعارات بنجاح!');
+            notificationsModal.style.display = 'none';
+        });
+
+        // Chat functionality
+        chatIcon.addEventListener('click', () => {
+            chatBox.style.display = chatBox.style.display === 'block' ? 'none' : 'block';
+        });
+
+        sendChatBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (message) {
+                const messageElement = document.createElement('div');
+                messageElement.style.marginBottom = '10px';
+                messageElement.style.padding = '8px';
+                messageElement.style.background = '#e3f2fd';
+                messageElement.style.borderRadius = '5px';
+                messageElement.textContent = message;
+                chatMessages.appendChild(messageElement);
+                chatInput.value = '';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Simulate admin response after a delay
+                setTimeout(() => {
+                    const responseElement = document.createElement('div');
+                    responseElement.style.marginBottom = '10px';
+                    responseElement.style.padding = '8px';
+                    responseElement.style.background = '#f1f1f1';
+                    responseElement.style.borderRadius = '5px';
+                    responseElement.textContent = 'شكراً لتواصلكم، سنرد عليكم قريباً.';
+                    chatMessages.appendChild(responseElement);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 2000);
+            }
+        }
+
+        // Admin panel functionality
+        sendMessageBtn.addEventListener('click', () => {
+            const message = document.getElementById('adminMessage').value;
+            const schedule = document.getElementById('messageSchedule').value;
+            
+            if (message) {
+                alert(`تم إرسال الرسالة بنجاح!${schedule ? '\nموعد الإرسال: ' + schedule : ''}`);
+                document.getElementById('adminMessage').value = '';
+                document.getElementById('messageSchedule').value = '';
+            } else {
+                alert('يرجى كتابة رسالة أولاً');
+            }
+        });
+
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.feature-card, .hero-image, .hero-content').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(el);
+        });
+
+        // Initialize data when page loads
+        document.addEventListener('DOMContentLoaded', initializeData);
+    </script>
 </body>
 </html>
