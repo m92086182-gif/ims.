@@ -1,13 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const http = require('http');
-const WebSocket = require('ws');
 
 const app = express();
-const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
-
 const PORT = process.env.PORT || 3000;
 
 // Middleware
@@ -19,131 +14,19 @@ app.use(cors({
 app.use(express.json());
 app.use(express.static('.'));
 
-// تخزين البيانات
+// تخزين البيانات في الذاكرة
 let requests = [];
 let notifications = [];
 let supportMessages = [];
-let adminSockets = new Set();
-let userSockets = new Map();
-
-// WebSocket connection handling
-wss.on('connection', (ws, req) => {
-    console.log('🔗 عميل متصل جديد');
-    
-    ws.on('message', (message) => {
-        try {
-            const data = JSON.parse(message);
-            
-            if (data.type === 'admin_connect') {
-                // اتصال أدمن
-                adminSockets.add(ws);
-                console.log('🛠️ أدمن متصل');
-                
-                // إرسال البيانات الحالية للأدمن
-                ws.send(JSON.stringify({
-                    type: 'initial_data',
-                    requests: requests,
-                    notifications: notifications
-                }));
-            }
-            else if (data.type === 'user_connect') {
-                // اتصال مستخدم عادي
-                userSockets.set(data.userId, ws);
-                console.log('👤 مستخدم متصل:', data.userId);
-            }
-            else if (data.type === 'new_message') {
-                // رسالة جديدة من الدعم
-                handleNewMessage(data);
-            }
-            
-        } catch (error) {
-            console.error('❌ خطأ في معالجة رسالة WebSocket:', error);
-        }
-    });
-    
-    ws.on('close', () => {
-        adminSockets.delete(ws);
-        for (let [userId, socket] of userSockets.entries()) {
-            if (socket === ws) {
-                userSockets.delete(userId);
-                break;
-            }
-        }
-        console.log('🔌 عميل انقطع');
-    });
-});
-
-// معالجة الرسائل الجديدة
-function handleNewMessage(data) {
-    const { message, userName, userPhone, type } = data;
-    
-    // حفظ الرسالة في قاعدة البيانات
-    const newMessage = {
-        id: Date.now().toString(),
-        message,
-        userName: userName || 'مستخدم',
-        userPhone: userPhone || 'غير معروف',
-        type: type || 'support',
-        timestamp: new Date().toISOString(),
-        status: 'new'
-    };
-    
-    if (type === 'support') {
-        supportMessages.push(newMessage);
-    }
-    
-    // إضافة إشعار جديد
-    const notification = {
-        id: Date.now().toString(),
-        message: type === 'support' 
-            ? `رسالة دعم جديدة من ${userName}`
-            : `طلب جديد: ${userName} - ${type === 'account' ? 'إنشاء حساب' : 'طلب أرقام'}`,
-        type: type === 'support' ? 'support' : 'request',
-        timestamp: new Date().toISOString(),
-        data: newMessage
-    };
-    
-    notifications.push(notification);
-    
-    // إرسال الإشعار لجميع الأدمن المتصلين
-    broadcastToAdmins({
-        type: 'new_notification',
-        notification: notification
-    });
-    
-    // إرسال تأكيد للمستخدم
-    if (data.userId && userSockets.has(data.userId)) {
-        const userWs = userSockets.get(data.userId);
-        userWs.send(JSON.stringify({
-            type: 'message_sent',
-            message: 'تم إرسال رسالتك بنجاح وسيتم الرد قريباً'
-        }));
-    }
-    
-    console.log('📨 رسالة جديدة:', {
-        type: type,
-        user: userName,
-        message: message.substring(0, 50) + '...'
-    });
-}
-
-// بث البيانات لجميع الأدمن
-function broadcastToAdmins(data) {
-    const message = JSON.stringify(data);
-    adminSockets.forEach(ws => {
-        if (ws.readyState === WebSocket.OPEN) {
-            ws.send(message);
-        }
-    });
-}
 
 // Routes
 // الحصول على جميع الطلبات
 app.get('/api/requests', (req, res) => {
     try {
+        console.log('📨 جلب الطلبات - العدد:', requests.length);
         res.json({
             success: true,
-            requests: requests.reverse()
+            requests: requests.reverse() // أحدث الطلبات أولاً
         });
     } catch (error) {
         console.error('❌ خطأ في جلب الطلبات:', error);
@@ -157,7 +40,9 @@ app.get('/api/requests', (req, res) => {
 // إضافة طلب جديد
 app.post('/api/requests', (req, res) => {
     try {
-        const { type, name, phone, country, quantity, range, userId } = req.body;
+        const { type, name, phone, country, quantity, range } = req.body;
+        
+        console.log('📝 طلب جديد:', { type, name, phone, country, quantity, range });
         
         if (!type || !name) {
             return res.status(400).json({
@@ -174,26 +59,40 @@ app.post('/api/requests', (req, res) => {
             country: country || null,
             quantity: quantity || null,
             range: range || null,
-            userId: userId || null,
             status: 'pending',
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            receivedAt: new Date().toLocaleString('ar-EG')
         };
         
         requests.push(newRequest);
         
-        // إرسال إشعار فوري عبر WebSocket
-        handleNewMessage({
-            type: type,
-            message: type === 'account' ? 'طلب إنشاء حساب جديد' : `طلب أرقام لـ ${country}`,
-            userName: name,
-            userPhone: phone,
-            userId: userId
+        // إضافة إشعار جديد
+        const notificationMessage = type === 'account' 
+            ? `طلب جديد: ${name} - إنشاء حساب (${phone})`
+            : `طلب جديد: ${name} - أرقام ${country} (${quantity} رقم)`;
+        
+        const newNotification = {
+            id: Date.now().toString(),
+            message: notificationMessage,
+            type: 'request',
+            timestamp: new Date().toISOString(),
+            requestId: newRequest.id
+        };
+        
+        notifications.push(newNotification);
+        
+        console.log('✅ طلب مضاف بنجاح:', {
+            id: newRequest.id,
+            type: newRequest.type,
+            name: newRequest.name,
+            totalRequests: requests.length
         });
         
         res.json({
             success: true,
             message: 'تم إرسال الطلب بنجاح',
-            request: newRequest
+            request: newRequest,
+            requestId: newRequest.id
         });
         
     } catch (error) {
@@ -211,9 +110,12 @@ app.post('/api/requests/:id/:action', (req, res) => {
         const { id, action } = req.params;
         const { adminMessage } = req.body;
         
+        console.log(`🔄 معالجة طلب: ${id} - ${action}`);
+        
         const requestIndex = requests.findIndex(req => req.id === id);
         
         if (requestIndex === -1) {
+            console.log('❌ الطلب غير موجود:', id);
             return res.status(404).json({
                 success: false,
                 message: 'الطلب غير موجود'
@@ -224,45 +126,35 @@ app.post('/api/requests/:id/:action', (req, res) => {
         
         if (action === 'accept') {
             requests[requestIndex].status = 'accepted';
-            
-            // إرسال رسالة قبول للمستخدم
-            if (request.userId && userSockets.has(request.userId)) {
-                const userWs = userSockets.get(request.userId);
-                userWs.send(JSON.stringify({
-                    type: 'request_accepted',
-                    message: adminMessage || `تم قبول طلبك بنجاح! ${request.type === 'account' ? 'سيتم التواصل معك قريباً' : 'سيتم إرسال الأرقام قريباً'}`,
-                    request: request
-                }));
-            }
+            requests[requestIndex].processedAt = new Date().toLocaleString('ar-EG');
+            requests[requestIndex].adminMessage = adminMessage;
             
             const acceptNotification = {
                 id: Date.now().toString(),
                 message: `تم قبول طلب ${request.name}`,
                 type: 'success',
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
+                requestId: request.id
             };
             notifications.push(acceptNotification);
             
+            console.log('✅ طلب مقبول:', request.name);
+            
         } else if (action === 'reject') {
             requests[requestIndex].status = 'rejected';
-            
-            // إرسال رسالة رفض للمستخدم
-            if (request.userId && userSockets.has(request.userId)) {
-                const userWs = userSockets.get(request.userId);
-                userWs.send(JSON.stringify({
-                    type: 'request_rejected',
-                    message: adminMessage || 'نأسف، تم رفض طلبك',
-                    request: request
-                }));
-            }
+            requests[requestIndex].processedAt = new Date().toLocaleString('ar-EG');
+            requests[requestIndex].adminMessage = adminMessage;
             
             const rejectNotification = {
                 id: Date.now().toString(),
                 message: `تم رفض طلب ${request.name}`,
                 type: 'error',
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
+                requestId: request.id
             };
             notifications.push(rejectNotification);
+            
+            console.log('❌ طلب مرفوض:', request.name);
         } else {
             return res.status(400).json({
                 success: false,
@@ -270,15 +162,10 @@ app.post('/api/requests/:id/:action', (req, res) => {
             });
         }
         
-        // إرسال تحديث للأدمن
-        broadcastToAdmins({
-            type: 'request_updated',
-            request: requests[requestIndex]
-        });
-        
         res.json({
             success: true,
-            message: `تم ${action === 'accept' ? 'قبول' : 'رفض'} الطلب بنجاح`
+            message: `تم ${action === 'accept' ? 'قبول' : 'رفض'} الطلب بنجاح`,
+            request: requests[requestIndex]
         });
         
     } catch (error) {
@@ -290,61 +177,10 @@ app.post('/api/requests/:id/:action', (req, res) => {
     }
 });
 
-// إرسال رسالة من الأدمن للمستخدم
-app.post('/api/send-message', (req, res) => {
-    try {
-        const { userId, message, requestId } = req.body;
-        
-        if (!message) {
-            return res.status(400).json({
-                success: false,
-                message: 'الرسالة مطلوبة'
-            });
-        }
-        
-        // البحث عن المستخدم
-        if (userId && userSockets.has(userId)) {
-            const userWs = userSockets.get(userId);
-            userWs.send(JSON.stringify({
-                type: 'admin_message',
-                message: message,
-                timestamp: new Date().toISOString()
-            }));
-            
-            // تسجيل الرسالة
-            const adminMessage = {
-                id: Date.now().toString(),
-                from: 'admin',
-                to: userId,
-                message: message,
-                timestamp: new Date().toISOString()
-            };
-            
-            console.log('📤 رسالة أدمن مرسلة:', { to: userId, message: message.substring(0, 50) + '...' });
-            
-            res.json({
-                success: true,
-                message: 'تم إرسال الرسالة بنجاح'
-            });
-        } else {
-            res.status(404).json({
-                success: false,
-                message: 'المستخدم غير متصل حالياً'
-            });
-        }
-        
-    } catch (error) {
-        console.error('❌ خطأ في إرسال رسالة:', error);
-        res.status(500).json({
-            success: false,
-            message: 'خطأ في السيرفر'
-        });
-    }
-});
-
 // الحصول على الإشعارات
 app.get('/api/notifications', (req, res) => {
     try {
+        console.log('🔔 جلب الإشعارات - العدد:', notifications.length);
         res.json({
             success: true,
             notifications: notifications.reverse()
@@ -361,9 +197,11 @@ app.get('/api/notifications', (req, res) => {
 // عدد الإشعارات
 app.get('/api/notifications/count', (req, res) => {
     try {
+        const count = notifications.length;
+        console.log('🔢 عدد الإشعارات:', count);
         res.json({
             success: true,
-            count: notifications.length
+            count: count
         });
     } catch (error) {
         console.error('❌ خطأ في جلب عدد الإشعارات:', error);
@@ -377,7 +215,9 @@ app.get('/api/notifications/count', (req, res) => {
 // إرسال رسالة دعم
 app.post('/api/support', (req, res) => {
     try {
-        const { message, userName, userPhone, userId } = req.body;
+        const { message, userName, userPhone } = req.body;
+        
+        console.log('💬 رسالة دعم جديدة:', { userName, userPhone, message });
         
         if (!message) {
             return res.status(400).json({
@@ -386,14 +226,26 @@ app.post('/api/support', (req, res) => {
             });
         }
         
-        // استخدام WebSocket لإرسال الرسالة
-        handleNewMessage({
-            type: 'support',
-            message: message,
+        const supportMessage = {
+            id: Date.now().toString(),
+            message,
             userName: userName || 'مستخدم',
             userPhone: userPhone || 'غير معروف',
-            userId: userId
-        });
+            timestamp: new Date().toISOString()
+        };
+        
+        supportMessages.push(supportMessage);
+        
+        const supportNotification = {
+            id: Date.now().toString(),
+            message: `رسالة دعم جديدة من ${userName || 'مستخدم'}: ${message.substring(0, 50)}...`,
+            type: 'support',
+            timestamp: new Date().toISOString()
+        };
+        
+        notifications.push(supportNotification);
+        
+        console.log('✅ رسالة دعم مضافة بنجاح');
         
         res.json({
             success: true,
@@ -409,10 +261,12 @@ app.post('/api/support', (req, res) => {
     }
 });
 
-// إرسال رسالة أدمن عامة
+// إرسال رسالة أدمن
 app.post('/api/admin/message', (req, res) => {
     try {
         const { message, schedule } = req.body;
+        
+        console.log('📢 رسالة أدمن:', message);
         
         if (!message) {
             return res.status(400).json({
@@ -431,24 +285,7 @@ app.post('/api/admin/message', (req, res) => {
         
         notifications.push(adminNotification);
         
-        // بث الرسالة لجميع المستخدمين المتصلين
-        const broadcastMessage = JSON.stringify({
-            type: 'admin_broadcast',
-            message: message,
-            timestamp: new Date().toISOString()
-        });
-        
-        userSockets.forEach(ws => {
-            if (ws.readyState === WebSocket.OPEN) {
-                ws.send(broadcastMessage);
-            }
-        });
-        
-        // إرسال للأدمن أيضاً
-        broadcastToAdmins({
-            type: 'new_notification',
-            notification: adminNotification
-        });
+        console.log('✅ رسالة أدمن مضافة بنجاح');
         
         res.json({
             success: true,
@@ -473,10 +310,11 @@ app.get('/api/stats', (req, res) => {
             acceptedRequests: requests.filter(req => req.status === 'accepted').length,
             rejectedRequests: requests.filter(req => req.status === 'rejected').length,
             totalNotifications: notifications.length,
-            connectedAdmins: adminSockets.size,
-            connectedUsers: userSockets.size,
-            supportMessages: supportMessages.length
+            supportMessages: supportMessages.length,
+            serverTime: new Date().toLocaleString('ar-EG')
         };
+        
+        console.log('📊 إحصائيات:', stats);
         
         res.json({
             success: true,
@@ -492,6 +330,36 @@ app.get('/api/stats', (req, res) => {
     }
 });
 
+// مسح جميع البيانات (للتطوير فقط)
+app.delete('/api/clear-data', (req, res) => {
+    try {
+        const previousRequests = requests.length;
+        const previousNotifications = notifications.length;
+        
+        requests = [];
+        notifications = [];
+        supportMessages = [];
+        
+        console.log('🗑️ تم مسح جميع البيانات');
+        
+        res.json({
+            success: true,
+            message: 'تم مسح جميع البيانات',
+            cleared: {
+                requests: previousRequests,
+                notifications: previousNotifications
+            }
+        });
+        
+    } catch (error) {
+        console.error('❌ خطأ في مسح البيانات:', error);
+        res.status(500).json({
+            success: false,
+            message: 'خطأ في السيرفر'
+        });
+    }
+});
+
 // Route for serving the main page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
@@ -499,23 +367,30 @@ app.get('/', (req, res) => {
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-    res.json({
+    const healthInfo = {
         success: true,
         message: 'السيرفر يعمل بشكل صحيح',
-        timestamp: new Date().toISOString(),
-        connections: {
-            admins: adminSockets.size,
-            users: userSockets.size
+        timestamp: new Date().toLocaleString('ar-EG'),
+        data: {
+            requests: requests.length,
+            notifications: notifications.length,
+            supportMessages: supportMessages.length
         }
-    });
+    };
+    
+    console.log('❤️ Health check:', healthInfo);
+    
+    res.json(healthInfo);
 });
 
 // Start server
-server.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 السيرفر يعمل على http://localhost:${PORT}`);
-    console.log(`📡 WebSocket server running on ws://localhost:${PORT}`);
-    console.log(`📧 نقاط API متاحة على http://localhost:${PORT}/api`);
-    console.log(`❤️  Health check: http://localhost:${PORT}/api/health`);
+app.listen(PORT, '0.0.0.0', () => {
+    console.log('🚀 ==================================');
+    console.log('🚀 السيرفر يعمل على http://localhost:' + PORT);
+    console.log('📧 نقاط API متاحة على http://localhost:' + PORT + '/api');
+    console.log('❤️  Health check: http://localhost:' + PORT + '/api/health');
+    console.log('📊 الإحصائيات: http://localhost:' + PORT + '/api/stats');
+    console.log('🚀 ==================================');
 });
 
 // Error handling middleware
@@ -529,6 +404,7 @@ app.use((err, req, res, next) => {
 
 // Handle 404
 app.use((req, res) => {
+    console.log('❌ Endpoint غير موجود:', req.url);
     res.status(404).json({
         success: false,
         message: 'Endpoint غير موجود'
