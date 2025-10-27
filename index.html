@@ -937,8 +937,35 @@
             password: 'test'
         };
 
-        // API base URL
-        const API_BASE_URL = 'http://localhost:3000/api';
+        // نظام التخزين المحلي (يعمل بدون سيرفر)
+        const LOCAL_STORAGE = {
+            get: (key) => {
+                try {
+                    const data = localStorage.getItem(key);
+                    return data ? JSON.parse(data) : [];
+                } catch {
+                    return [];
+                }
+            },
+            set: (key, data) => {
+                try {
+                    localStorage.setItem(key, JSON.stringify(data));
+                } catch (error) {
+                    console.error('Error saving to localStorage:', error);
+                }
+            },
+            add: (key, item) => {
+                const data = LOCAL_STORAGE.get(key);
+                const newItem = {
+                    id: Date.now().toString(),
+                    ...item,
+                    timestamp: new Date().toISOString()
+                };
+                data.unshift(newItem);
+                LOCAL_STORAGE.set(key, data);
+                return newItem;
+            }
+        };
 
         // حالة المستخدم
         let isAdminLoggedIn = false;
@@ -969,41 +996,11 @@
             }, 3000);
         }
 
-        // API Functions
-        async function apiRequest(endpoint, options = {}) {
-            try {
-                const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        ...options.headers
-                    },
-                    ...options
-                });
-                
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                
-                return await response.json();
-            } catch (error) {
-                console.error('API request failed:', error);
-                showToast('حدث خطأ في الاتصال بالسيرفر', true);
-                throw error;
-            }
-        }
-
         // تحديث العداد
-        async function updateNotificationBadge() {
-            try {
-                const data = await apiRequest('/notifications/count');
-                const badge = document.getElementById('notificationBadge');
-                badge.textContent = data.count;
-            } catch (error) {
-                // Fallback to local storage if API fails
-                const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
-                const badge = document.getElementById('notificationBadge');
-                badge.textContent = notifications.length;
-            }
+        function updateNotificationBadge() {
+            const notifications = LOCAL_STORAGE.get('notifications');
+            const badge = document.getElementById('notificationBadge');
+            badge.textContent = notifications.length;
         }
 
         // Modal Controls
@@ -1066,7 +1063,7 @@
         });
 
         // Admin login form
-        adminLoginForm.addEventListener('submit', async (e) => {
+        adminLoginForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const username = document.getElementById('adminUsername').value;
             const password = document.getElementById('adminPassword').value;
@@ -1076,7 +1073,7 @@
                 adminLoginModal.style.display = 'none';
                 showAdminPanel();
                 adminLoginBtn.innerHTML = '<i class="fas fa-cogs"></i> لوحة التحكم';
-                await loadAdminRequests();
+                loadAdminRequests();
                 showToast('تم تسجيل الدخول بنجاح!');
             } else {
                 showToast('اسم المستخدم أو كلمة المرور غير صحيحة!', true);
@@ -1090,96 +1087,108 @@
         }
 
         // تحميل طلبات الأدمن
-        async function loadAdminRequests() {
-            try {
-                const data = await apiRequest('/requests');
-                requestsContainer.innerHTML = '';
+        function loadAdminRequests() {
+            const requests = LOCAL_STORAGE.get('requests');
+            requestsContainer.innerHTML = '';
 
-                if (data.requests.length === 0) {
-                    requestsContainer.innerHTML = '<p style="text-align: center; color: #777; padding: 20px;">لا توجد طلبات جديدة</p>';
-                    return;
-                }
-
-                data.requests.forEach(request => {
-                    const requestElement = document.createElement('div');
-                    requestElement.className = 'request-item';
-                    requestElement.innerHTML = `
-                        <div class="request-info">
-                            <strong>${request.name}</strong> - 
-                            ${request.type === 'account' ? 'طلب إنشاء حساب' : `طلب أرقام (${request.country})`}
-                            <br><small>${new Date(request.timestamp).toLocaleString('ar-EG')}</small>
-                            ${request.phone ? `<br><small>${request.phone}</small>` : ''}
-                            ${request.quantity ? `<br><small>الكمية: ${request.quantity}</small>` : ''}
-                            ${request.range ? `<br><small>الرينج: ${request.range}</small>` : ''}
-                        </div>
-                        <div class="request-actions">
-                            <button class="btn accept-btn" data-id="${request.id}" style="padding: 8px 15px; background: #2ecc71;">قبول</button>
-                            <button class="btn reject-btn" data-id="${request.id}" style="padding: 8px 15px; background: #e74c3c;">رفض</button>
-                        </div>
-                    `;
-                    requestsContainer.appendChild(requestElement);
-                });
-
-                // إضافة event listeners للأزرار
-                document.querySelectorAll('.accept-btn').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
-                        const requestId = e.target.dataset.id;
-                        await handleRequestAction(requestId, 'accept');
-                    });
-                });
-
-                document.querySelectorAll('.reject-btn').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
-                        const requestId = e.target.dataset.id;
-                        await handleRequestAction(requestId, 'reject');
-                    });
-                });
-
-            } catch (error) {
-                requestsContainer.innerHTML = '<p style="text-align: center; color: #e74c3c; padding: 20px;">خطأ في تحميل الطلبات</p>';
+            if (requests.length === 0) {
+                requestsContainer.innerHTML = '<p style="text-align: center; color: #777; padding: 20px;">لا توجد طلبات جديدة</p>';
+                return;
             }
+
+            requests.forEach(request => {
+                const requestElement = document.createElement('div');
+                requestElement.className = 'request-item';
+                requestElement.innerHTML = `
+                    <div class="request-info">
+                        <strong>${request.name}</strong> - 
+                        ${request.type === 'account' ? 'طلب إنشاء حساب' : `طلب أرقام (${request.country})`}
+                        <br><small>${new Date(request.timestamp).toLocaleString('ar-EG')}</small>
+                        ${request.phone ? `<br><small>${request.phone}</small>` : ''}
+                        ${request.quantity ? `<br><small>الكمية: ${request.quantity}</small>` : ''}
+                        ${request.range ? `<br><small>الرينج: ${request.range}</small>` : ''}
+                    </div>
+                    <div class="request-actions">
+                        <button class="btn accept-btn" data-id="${request.id}" style="padding: 8px 15px; background: #2ecc71;">قبول</button>
+                        <button class="btn reject-btn" data-id="${request.id}" style="padding: 8px 15px; background: #e74c3c;">رفض</button>
+                    </div>
+                `;
+                requestsContainer.appendChild(requestElement);
+            });
+
+            // إضافة event listeners للأزرار
+            document.querySelectorAll('.accept-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const requestId = e.target.dataset.id;
+                    handleRequestAction(requestId, 'accept');
+                });
+            });
+
+            document.querySelectorAll('.reject-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const requestId = e.target.dataset.id;
+                    handleRequestAction(requestId, 'reject');
+                });
+            });
         }
 
         // معالجة إجراءات الطلبات
-        async function handleRequestAction(requestId, action) {
-            try {
-                await apiRequest(`/requests/${requestId}/${action}`, {
-                    method: 'POST'
-                });
-                
-                showToast(action === 'accept' ? 'تم قبول الطلب بنجاح!' : 'تم رفض الطلب!');
-                await loadAdminRequests();
-                await updateNotificationBadge();
-            } catch (error) {
-                showToast('حدث خطأ في معالجة الطلب', true);
+        function handleRequestAction(requestId, action) {
+            const requests = LOCAL_STORAGE.get('requests');
+            const requestIndex = requests.findIndex(req => req.id === requestId);
+            
+            if (requestIndex === -1) {
+                showToast('الطلب غير موجود', true);
+                return;
             }
+
+            const request = requests[requestIndex];
+            
+            if (action === 'accept') {
+                // إضافة إشعار بالقبول
+                LOCAL_STORAGE.add('notifications', {
+                    message: `تم قبول طلب ${request.name}`,
+                    type: 'success'
+                });
+                showToast('تم قبول الطلب بنجاح!');
+            } else {
+                // إضافة إشعار بالرفض
+                LOCAL_STORAGE.add('notifications', {
+                    message: `تم رفض طلب ${request.name}`,
+                    type: 'error'
+                });
+                showToast('تم رفض الطلب!');
+            }
+
+            // إزالة الطلب من القائمة
+            requests.splice(requestIndex, 1);
+            LOCAL_STORAGE.set('requests', requests);
+            
+            loadAdminRequests();
+            updateNotificationBadge();
         }
 
         // تحديث الإشعارات
-        async function loadNotifications() {
-            try {
-                const data = await apiRequest('/notifications');
-                notificationsList.innerHTML = '';
+        function loadNotifications() {
+            const notifications = LOCAL_STORAGE.get('notifications');
+            notificationsList.innerHTML = '';
 
-                if (data.notifications.length === 0) {
-                    notificationsList.innerHTML = '<p style="text-align: center; color: #777; padding: 20px;">لا توجد إشعارات</p>';
-                    return;
-                }
-
-                data.notifications.forEach(notification => {
-                    const notificationElement = document.createElement('div');
-                    notificationElement.className = 'request-item';
-                    notificationElement.innerHTML = `
-                        <div>
-                            <strong>${notification.message}</strong>
-                            <br><small>${new Date(notification.timestamp).toLocaleString('ar-EG')}</small>
-                        </div>
-                    `;
-                    notificationsList.appendChild(notificationElement);
-                });
-            } catch (error) {
-                notificationsList.innerHTML = '<p style="text-align: center; color: #e74c3c; padding: 20px;">خطأ في تحميل الإشعارات</p>';
+            if (notifications.length === 0) {
+                notificationsList.innerHTML = '<p style="text-align: center; color: #777; padding: 20px;">لا توجد إشعارات</p>';
+                return;
             }
+
+            notifications.forEach(notification => {
+                const notificationElement = document.createElement('div');
+                notificationElement.className = 'request-item';
+                notificationElement.innerHTML = `
+                    <div>
+                        <strong>${notification.message}</strong>
+                        <br><small>${new Date(notification.timestamp).toLocaleString('ar-EG')}</small>
+                    </div>
+                `;
+                notificationsList.appendChild(notificationElement);
+            });
         }
 
         // Logout functionality
@@ -1191,82 +1200,80 @@
         });
 
         // Form submissions
-        accountForm.addEventListener('submit', async (e) => {
+        accountForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const userName = document.getElementById('userName').value;
             const userPhone = document.getElementById('userPhone').value;
             
-            try {
-                await apiRequest('/requests', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        type: 'account',
-                        name: userName,
-                        phone: userPhone
-                    })
-                });
+            // إضافة الطلب إلى التخزين
+            LOCAL_STORAGE.add('requests', {
+                type: 'account',
+                name: userName,
+                phone: userPhone
+            });
 
-                accountModal.style.display = 'none';
-                successModal.style.display = 'flex';
-                
-                // تحديث البيانات
-                await updateNotificationBadge();
-                if (isAdminLoggedIn) {
-                    await loadAdminRequests();
-                }
-                
-                // Reset form
-                accountForm.reset();
-                
-                // Hide success modal after 3 seconds
-                setTimeout(() => {
-                    successModal.style.display = 'none';
-                }, 3000);
-                
-            } catch (error) {
-                showToast('حدث خطأ في إرسال الطلب', true);
+            // إضافة إشعار جديد
+            LOCAL_STORAGE.add('notifications', {
+                message: `طلب جديد: ${userName} - إنشاء حساب`,
+                type: 'request'
+            });
+
+            accountModal.style.display = 'none';
+            successModal.style.display = 'flex';
+            
+            // تحديث البيانات
+            updateNotificationBadge();
+            if (isAdminLoggedIn) {
+                loadAdminRequests();
             }
+            
+            // Reset form
+            accountForm.reset();
+            
+            // Hide success modal after 3 seconds
+            setTimeout(() => {
+                successModal.style.display = 'none';
+            }, 3000);
         });
 
-        numbersForm.addEventListener('submit', async (e) => {
+        numbersForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const country = document.getElementById('country').value;
             const range = document.getElementById('range').value;
             const quantity = document.getElementById('quantity').value;
             const accountName = document.getElementById('accountName').value;
             
-            try {
-                await apiRequest('/requests', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        type: 'numbers',
-                        name: accountName,
-                        country: country,
-                        quantity: parseInt(quantity),
-                        range: range
-                    })
-                });
+            // إضافة الطلب إلى التخزين
+            LOCAL_STORAGE.add('requests', {
+                type: 'numbers',
+                name: accountName,
+                country: country,
+                quantity: parseInt(quantity),
+                range: range
+            });
 
-                numbersModal.style.display = 'none';
-                successModal.style.display = 'flex';
-                
-                // تحديث البيانات
-                await updateNotificationBadge();
-                if (isAdminLoggedIn) {
-                    await loadAdminRequests();
-                }
-                
-                // Reset form
-                numbersForm.reset();
-                
-                // Hide success modal after 3 seconds
-                setTimeout(() => {
-                    successModal.style.display = 'none';
-                }, 3000);
-                
-            } catch (error) {
-                showToast('حدث خطأ في إرسال الطلب', true);
+            // إضافة إشعار جديد
+            LOCAL_STORAGE.add('notifications', {
+                message: `طلب جديد: ${accountName} - أرقام (${country})`,
+                type: 'request'
+            });
+
+            numbersModal.style.display = 'none';
+            successModal.style.display = 'flex';
+            
+            // تحديث البيانات
+            updateNotificationBadge();
+            if (isAdminLoggedIn) {
+                loadAdminRequests();
             }
+            
+            // Reset form
+            numbersForm.reset();
+            
+            // Hide success modal after 3 seconds
+            setTimeout(() => {
+                successModal.style.display = 'none';
+            }, 3000);
         });
 
         // Notifications
@@ -1287,7 +1294,7 @@
             }
         });
 
-        async function sendMessage() {
+        function sendMessage() {
             const message = chatInput.value.trim();
             if (message) {
                 const messageElement = document.createElement('div');
@@ -1300,27 +1307,13 @@
                 chatInput.value = '';
                 chatMessages.scrollTop = chatMessages.scrollHeight;
                 
-                try {
-                    // إرسال رسالة الدعم إلى السيرفر
-                    await apiRequest('/support', {
-                        method: 'POST',
-                        body: JSON.stringify({ message })
-                    });
-                    
-                    await updateNotificationBadge();
-                    
-                } catch (error) {
-                    // Fallback to local storage
-                    const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
-                    notifications.unshift({
-                        id: Date.now(),
-                        message: `رسالة دعم جديدة: ${message}`,
-                        type: 'support',
-                        timestamp: new Date().toISOString()
-                    });
-                    localStorage.setItem('notifications', JSON.stringify(notifications));
-                    updateNotificationBadge();
-                }
+                // إضافة رسالة الدعم إلى النظام
+                LOCAL_STORAGE.add('notifications', {
+                    message: `رسالة دعم جديدة: ${message}`,
+                    type: 'support'
+                });
+                
+                updateNotificationBadge();
                 
                 // Simulate admin response after a delay
                 setTimeout(() => {
@@ -1337,28 +1330,22 @@
         }
 
         // Admin panel functionality
-        sendMessageBtn.addEventListener('click', async () => {
+        sendMessageBtn.addEventListener('click', () => {
             const message = document.getElementById('adminMessage').value;
             const schedule = document.getElementById('messageSchedule').value;
             
             if (message) {
-                try {
-                    await apiRequest('/admin/message', {
-                        method: 'POST',
-                        body: JSON.stringify({
-                            message,
-                            schedule: schedule || null
-                        })
-                    });
-                    
-                    showToast(`تم إرسال الرسالة بنجاح!${schedule ? '\nموعد الإرسال: ' + schedule : ''}`);
-                    document.getElementById('adminMessage').value = '';
-                    document.getElementById('messageSchedule').value = '';
-                    await updateNotificationBadge();
-                    
-                } catch (error) {
-                    showToast('حدث خطأ في إرسال الرسالة', true);
-                }
+                // إضافة الرسالة إلى النظام
+                LOCAL_STORAGE.add('notifications', {
+                    message: `رسالة أدمن: ${message}`,
+                    type: 'admin',
+                    schedule: schedule
+                });
+                
+                showToast(`تم إرسال الرسالة بنجاح!${schedule ? '\nموعد الإرسال: ' + schedule : ''}`);
+                document.getElementById('adminMessage').value = '';
+                document.getElementById('messageSchedule').value = '';
+                updateNotificationBadge();
             } else {
                 showToast('يرجى كتابة رسالة أولاً', true);
             }
@@ -1387,8 +1374,16 @@
         });
 
         // Initialize data when page loads
-        document.addEventListener('DOMContentLoaded', async () => {
-            await updateNotificationBadge();
+        document.addEventListener('DOMContentLoaded', () => {
+            updateNotificationBadge();
+            
+            // Initialize empty arrays if they don't exist
+            if (!localStorage.getItem('requests')) {
+                LOCAL_STORAGE.set('requests', []);
+            }
+            if (!localStorage.getItem('notifications')) {
+                LOCAL_STORAGE.set('notifications', []);
+            }
         });
     </script>
 </body>
