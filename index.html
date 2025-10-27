@@ -30,6 +30,7 @@
             background-color: var(--light-bg);
             color: var(--light-text);
             transition: var(--transition);
+            min-height: 100vh;
         }
 
         body.dark-mode {
@@ -40,13 +41,13 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 15px;
         }
 
         /* Header Styles */
         header {
             background: linear-gradient(135deg, var(--primary-red), var(--primary-blue));
-            padding: 20px 0;
+            padding: 15px 0;
             box-shadow: var(--shadow);
             position: relative;
             overflow: hidden;
@@ -60,7 +61,7 @@
         }
 
         .logo-text {
-            font-size: 4rem;
+            font-size: clamp(2.5rem, 6vw, 4rem);
             font-weight: 900;
             display: flex;
         }
@@ -87,18 +88,18 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 20px;
+            padding: 0 15px;
         }
 
         .nav-icons {
             display: flex;
-            gap: 20px;
+            gap: 15px;
         }
 
         .nav-icon {
             background-color: rgba(255, 255, 255, 0.2);
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -109,7 +110,7 @@
         }
 
         .nav-icon:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
             background-color: rgba(255, 255, 255, 0.3);
         }
 
@@ -120,9 +121,9 @@
             background-color: var(--primary-red);
             color: white;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 12px;
+            width: 18px;
+            height: 18px;
+            font-size: 11px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -133,8 +134,8 @@
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            padding: 60px 0;
-            gap: 40px;
+            padding: 40px 0;
+            gap: 30px;
         }
 
         .hero-image {
@@ -145,6 +146,7 @@
 
         .hero-image img {
             max-width: 100%;
+            height: auto;
             border-radius: 10px;
             box-shadow: var(--shadow);
             animation: float 6s ease-in-out infinite;
@@ -152,7 +154,7 @@
 
         @keyframes float {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+            50% { transform: translateY(-15px); }
             100% { transform: translateY(0px); }
         }
 
@@ -162,30 +164,30 @@
         }
 
         .hero-content h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            margin-bottom: 15px;
             background: linear-gradient(135deg, var(--primary-red), var(--primary-blue));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .hero-content p {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 2vw, 1.2rem);
             line-height: 1.6;
             margin-bottom: 20px;
         }
 
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin: 60px 0;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
         }
 
         .feature-card {
             background-color: var(--light-card);
             border-radius: 10px;
-            padding: 30px;
+            padding: 25px;
             box-shadow: var(--shadow);
             transition: var(--transition);
             text-align: center;
@@ -196,18 +198,18 @@
         }
 
         .feature-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-8px);
         }
 
         .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
             color: var(--primary-blue);
         }
 
         .feature-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
         }
 
         /* Modal Styles */
@@ -223,6 +225,7 @@
             justify-content: center;
             align-items: center;
             animation: fadeIn 0.3s ease;
+            padding: 15px;
         }
 
         @keyframes fadeIn {
@@ -233,9 +236,11 @@
         .modal-content {
             background-color: var(--light-card);
             border-radius: 10px;
-            padding: 30px;
-            width: 90%;
+            padding: 25px;
+            width: 100%;
             max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
             box-shadow: var(--shadow);
             position: relative;
             animation: slideUp 0.3s ease;
@@ -262,10 +267,11 @@
         .modal h2 {
             margin-bottom: 20px;
             text-align: center;
+            font-size: 1.5rem;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .form-group label {
@@ -309,6 +315,7 @@
             cursor: pointer;
             transition: var(--transition);
             text-align: center;
+            text-decoration: none;
         }
 
         .btn:hover {
@@ -328,16 +335,16 @@
         }
 
         .success-animation i {
-            font-size: 4rem;
+            font-size: 3.5rem;
             color: #2ecc71;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             animation: bounce 1s ease;
         }
 
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-            40% {transform: translateY(-20px);}
-            60% {transform: translateY(-10px);}
+            40% {transform: translateY(-15px);}
+            60% {transform: translateY(-8px);}
         }
 
         /* Chat Widget */
@@ -349,8 +356,8 @@
         }
 
         .chat-icon {
-            width: 60px;
-            height: 60px;
+            width: 55px;
+            height: 55px;
             background: linear-gradient(135deg, var(--primary-red), var(--primary-blue));
             border-radius: 50%;
             display: flex;
@@ -367,13 +374,13 @@
         }
 
         .chat-icon i {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: white;
         }
 
         .chat-box {
             position: absolute;
-            bottom: 70px;
+            bottom: 65px;
             left: 0;
             width: 300px;
             background-color: var(--light-card);
@@ -390,14 +397,16 @@
         .chat-header {
             background: linear-gradient(135deg, var(--primary-red), var(--primary-blue));
             color: white;
-            padding: 15px;
+            padding: 12px;
             font-weight: 600;
+            font-size: 0.9rem;
         }
 
         .chat-messages {
-            padding: 15px;
-            height: 200px;
+            padding: 12px;
+            height: 180px;
             overflow-y: auto;
+            font-size: 0.9rem;
         }
 
         .chat-input {
@@ -415,7 +424,8 @@
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            margin-right: 10px;
+            margin-right: 8px;
+            font-size: 0.9rem;
         }
 
         body.dark-mode .chat-input input {
@@ -429,8 +439,9 @@
             color: white;
             border: none;
             border-radius: 5px;
-            padding: 10px 15px;
+            padding: 8px 12px;
             cursor: pointer;
+            font-size: 0.9rem;
         }
 
         /* Admin Panel */
@@ -450,32 +461,46 @@
         .admin-panel h2 {
             margin-bottom: 20px;
             color: var(--primary-red);
+            font-size: 1.5rem;
         }
 
         .requests-list {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .request-item {
             background-color: rgba(0, 0, 0, 0.05);
-            padding: 15px;
+            padding: 12px;
             border-radius: 5px;
             margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         body.dark-mode .request-item {
             background-color: rgba(255, 255, 255, 0.05);
         }
 
+        .request-info {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .request-actions {
+            display: flex;
+            gap: 8px;
+        }
+
         .request-actions button {
-            margin-left: 10px;
+            padding: 6px 12px;
+            font-size: 0.85rem;
         }
 
         .admin-message-form {
-            margin-top: 30px;
+            margin-top: 25px;
         }
 
         /* Login Modal */
@@ -490,13 +515,14 @@
             z-index: 1001;
             justify-content: center;
             align-items: center;
+            padding: 15px;
         }
 
         .login-content {
             background-color: var(--light-card);
             border-radius: 10px;
-            padding: 30px;
-            width: 90%;
+            padding: 25px;
+            width: 100%;
             max-width: 400px;
             box-shadow: var(--shadow);
             position: relative;
@@ -508,22 +534,22 @@
 
         .login-header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .login-header .logo-text {
-            font-size: 2.5rem;
+            font-size: 2rem;
             margin-bottom: 10px;
         }
 
         /* Theme Toggle */
         .theme-toggle {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 15px;
+            right: 15px;
             background-color: var(--light-card);
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -541,59 +567,140 @@
         /* Admin Login Button */
         .admin-login-btn {
             position: fixed;
-            top: 20px;
-            left: 20px;
+            top: 15px;
+            left: 15px;
             background: linear-gradient(135deg, var(--primary-red), var(--primary-blue));
             color: white;
             border: none;
             border-radius: 5px;
-            padding: 10px 15px;
+            padding: 8px 12px;
             cursor: pointer;
             font-weight: 600;
             z-index: 999;
             box-shadow: var(--shadow);
+            font-size: 0.85rem;
         }
 
-        /* Server Data Display */
-        .server-data {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
             color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 30px 0;
-            text-align: center;
+            font-size: 1.5rem;
+            cursor: pointer;
         }
 
-        .server-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2ecc71;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: var(--shadow);
+            z-index: 1002;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
         }
 
-        .server-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 8px;
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            background: #e74c3c;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .logo-text {
-                font-size: 3rem;
+            .nav-icons {
+                display: none;
             }
             
-            .hero {
-                padding: 40px 0;
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .mobile-nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 250px;
+                height: 100vh;
+                background: var(--light-card);
+                z-index: 1000;
+                transition: var(--transition);
+                padding: 60px 20px 20px;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            }
+            
+            body.dark-mode .mobile-nav {
+                background: var(--dark-card);
+            }
+            
+            .mobile-nav.active {
+                right: 0;
+            }
+            
+            .mobile-nav .nav-icon {
+                width: 100%;
+                height: 50px;
+                border-radius: 8px;
+                margin-bottom: 10px;
+                background: rgba(0,0,0,0.05);
+            }
+            
+            body.dark-mode .mobile-nav .nav-icon {
+                background: rgba(255,255,255,0.05);
+            }
+            
+            .close-mobile-menu {
+                position: absolute;
+                top: 15px;
+                left: 15px;
+                font-size: 1.5rem;
+                cursor: pointer;
             }
             
             .chat-box {
                 width: 280px;
-                left: -130px;
+                left: -120px;
             }
             
             .admin-login-btn {
-                top: 80px;
+                top: 70px;
+            }
+            
+            .request-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .request-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 30px 0;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+            
+            .chat-box {
+                width: 250px;
+                left: -100px;
             }
         }
     </style>
@@ -609,6 +716,9 @@
         <i class="fas fa-moon"></i>
     </div>
 
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
     <!-- Header -->
     <header>
         <div class="container">
@@ -619,6 +729,9 @@
                 </div>
             </div>
             <nav>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
                 <div class="nav-icons">
                     <div class="nav-icon" id="accountIcon">
                         <i class="fas fa-user"></i>
@@ -628,12 +741,30 @@
                     </div>
                     <div class="nav-icon" id="notificationIcon">
                         <i class="fas fa-bell"></i>
-                        <span class="notification-badge" id="notificationBadge">3</span>
+                        <span class="notification-badge" id="notificationBadge">0</span>
                     </div>
                 </div>
             </nav>
         </div>
     </header>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobileNav">
+        <span class="close-mobile-menu" id="closeMobileMenu">&times;</span>
+        <div class="nav-icon" id="mobileAccountIcon">
+            <i class="fas fa-user"></i>
+            <span>إنشاء حساب</span>
+        </div>
+        <div class="nav-icon" id="mobileNumbersIcon">
+            <i class="fas fa-list"></i>
+            <span>طلب أرقام</span>
+        </div>
+        <div class="nav-icon" id="mobileNotificationIcon">
+            <i class="fas fa-bell"></i>
+            <span>الإشعارات</span>
+            <span class="notification-badge">0</span>
+        </div>
+    </div>
 
     <!-- Main Content -->
     <main class="container">
@@ -644,33 +775,10 @@
             <div class="hero-content">
                 <h2>تفعيل الأرقام لجميع التطبيقات</h2>
                 <p>
-                    شغلنا عبارة عن أرقام بنحطها لك في المنصة، وانت بتاخد الأرقام وبتروح تفعلها في التطبيقات والموكان. 
+                    شغلنا عبارة عن أرقام بنحطها لك في المنصة، وانت بتاخد الأرقام وبتروح تفعلها في التطبيقات والمواقع. 
                     الهدف تجربة الأرقام ونشوفها شغالة وهكذا. نحن نقدم خدمة موثوقة وسريعة لتفعيل حساباتك على مختلف المنصات.
                 </p>
                 <button class="btn" id="learnMoreBtn">اعرف المزيد</button>
-            </div>
-        </section>
-
-        <!-- Server Data Section -->
-        <section class="server-data">
-            <h2><i class="fas fa-server"></i> بيانات السيرفر</h2>
-            <div class="server-info">
-                <div class="server-item">
-                    <h3>الحالة</h3>
-                    <p><i class="fas fa-circle" style="color: #2ecc71;"></i> نشط</p>
-                </div>
-                <div class="server-item">
-                    <h3>المستخدمون النشطون</h3>
-                    <p>1,247</p>
-                </div>
-                <div class="server-item">
-                    <h3>الطلبات اليوم</h3>
-                    <p>89</p>
-                </div>
-                <div class="server-item">
-                    <h3>معدل النجاح</h3>
-                    <p>98.7%</p>
-                </div>
             </div>
         </section>
 
@@ -703,9 +811,9 @@
             <h2><i class="fas fa-cogs"></i> لوحة التحكم</h2>
             
             <div class="requests-list">
-                <h3>طلبات جديدة</h3>
+                <h3>الطلبات الجديدة</h3>
                 <div id="requestsContainer">
-                    <!-- Requests will be loaded here -->
+                    <!-- الطلبات سيتم تحميلها هنا -->
                 </div>
             </div>
             
@@ -818,7 +926,7 @@
                 <button class="btn btn-block" id="enableNotificationsBtn">تفعيل الإشعارات</button>
             </div>
             <div id="notificationsList">
-                <!-- Notifications will be loaded here -->
+                <!-- الإشعارات سيتم تحميلها هنا -->
             </div>
         </div>
     </div>
@@ -857,23 +965,25 @@
             password: 'test'
         };
 
-        // بيانات السيرفر الوهمية
-        const SERVER_DATA = {
-            status: 'active',
-            activeUsers: 1247,
-            dailyRequests: 89,
-            successRate: 98.7,
-            requests: [
-                { id: 1, type: 'account', name: 'محمد أحمد', phone: '+201234567890', date: '2024-01-15' },
-                { id: 2, type: 'numbers', name: 'أحمد خالد', country: 'الولايات المتحدة', quantity: 5, date: '2024-01-15' },
-                { id: 3, type: 'account', name: 'سارة محمد', phone: '+201112223344', date: '2024-01-14' },
-                { id: 4, type: 'numbers', name: 'خالد علي', country: 'المملكة المتحدة', quantity: 3, date: '2024-01-14' }
-            ],
-            notifications: [
-                { id: 1, message: 'طلب جديد: محمد أحمد - إنشاء حساب', time: 'منذ 5 دقائق' },
-                { id: 2, message: 'طلب جديد: أحمد خالد - أرقام (الولايات المتحدة)', time: 'منذ 15 دقيقة' },
-                { id: 3, message: 'تم تفعيل النظام بنجاح', time: 'منذ ساعة' }
-            ]
+        // نظام التخزين المحلي للطلبات والإشعارات
+        const SERVER_STORAGE = {
+            get: (key) => {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : [];
+            },
+            set: (key, data) => {
+                localStorage.setItem(key, JSON.stringify(data));
+            },
+            add: (key, item) => {
+                const data = SERVER_STORAGE.get(key);
+                data.unshift({
+                    id: Date.now(),
+                    ...item,
+                    timestamp: new Date().toLocaleString('ar-EG')
+                });
+                SERVER_STORAGE.set(key, data);
+                return data;
+            }
         };
 
         // حالة المستخدم
@@ -894,10 +1004,44 @@
             }
         });
 
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        const closeMobileMenu = document.getElementById('closeMobileMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileNav.classList.add('active');
+        });
+
+        closeMobileMenu.addEventListener('click', () => {
+            mobileNav.classList.remove('active');
+        });
+
+        // Toast Notification
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${isError ? 'error' : ''} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // تحديث العداد
+        function updateNotificationBadge() {
+            const notifications = SERVER_STORAGE.get('notifications');
+            const badge = document.getElementById('notificationBadge');
+            badge.textContent = notifications.length;
+        }
+
         // Modal Controls
         const accountIcon = document.getElementById('accountIcon');
         const numbersIcon = document.getElementById('numbersIcon');
         const notificationIcon = document.getElementById('notificationIcon');
+        const mobileAccountIcon = document.getElementById('mobileAccountIcon');
+        const mobileNumbersIcon = document.getElementById('mobileNumbersIcon');
+        const mobileNotificationIcon = document.getElementById('mobileNotificationIcon');
         const accountModal = document.getElementById('accountModal');
         const numbersModal = document.getElementById('numbersModal');
         const notificationsModal = document.getElementById('notificationsModal');
@@ -922,53 +1066,25 @@
         const requestsContainer = document.getElementById('requestsContainer');
         const notificationsList = document.getElementById('notificationsList');
 
-        // تهيئة البيانات
-        function initializeData() {
-            updateNotifications();
-            updateServerStats();
-        }
-
-        // تحديث الإشعارات
-        function updateNotifications() {
-            notificationsList.innerHTML = '';
-            SERVER_DATA.notifications.forEach(notification => {
-                const notificationElement = document.createElement('div');
-                notificationElement.className = 'request-item';
-                notificationElement.innerHTML = `
-                    <div>
-                        <strong>${notification.message}</strong>
-                        <br><small>${notification.time}</small>
-                    </div>
-                `;
-                notificationsList.appendChild(notificationElement);
-            });
-        }
-
-        // تحديث إحصائيات السيرفر
-        function updateServerStats() {
-            // سيتم تحديث هذه البيانات من السيرفر الحقيقي لاحقاً
-            console.log('Server data loaded:', SERVER_DATA);
-        }
-
         // Show modals
-        accountIcon.addEventListener('click', () => {
-            accountModal.style.display = 'flex';
-        });
+        const showModal = (modal) => {
+            modal.style.display = 'flex';
+            mobileNav.classList.remove('active');
+        };
 
-        numbersIcon.addEventListener('click', () => {
-            numbersModal.style.display = 'flex';
-        });
-
-        notificationIcon.addEventListener('click', () => {
-            notificationsModal.style.display = 'flex';
-        });
+        accountIcon.addEventListener('click', () => showModal(accountModal));
+        numbersIcon.addEventListener('click', () => showModal(numbersModal));
+        notificationIcon.addEventListener('click', () => showModal(notificationsModal));
+        mobileAccountIcon.addEventListener('click', () => showModal(accountModal));
+        mobileNumbersIcon.addEventListener('click', () => showModal(numbersModal));
+        mobileNotificationIcon.addEventListener('click', () => showModal(notificationsModal));
 
         // Admin login button
         adminLoginBtn.addEventListener('click', () => {
             if (isAdminLoggedIn) {
                 showAdminPanel();
             } else {
-                adminLoginModal.style.display = 'flex';
+                showModal(adminLoginModal);
             }
         });
 
@@ -987,21 +1103,11 @@
 
         // Close modals when clicking outside
         window.addEventListener('click', (e) => {
-            if (e.target === accountModal) {
-                accountModal.style.display = 'none';
-            }
-            if (e.target === numbersModal) {
-                numbersModal.style.display = 'none';
-            }
-            if (e.target === notificationsModal) {
-                notificationsModal.style.display = 'none';
-            }
-            if (e.target === successModal) {
-                successModal.style.display = 'none';
-            }
-            if (e.target === adminLoginModal) {
-                adminLoginModal.style.display = 'none';
-            }
+            if (e.target === accountModal) accountModal.style.display = 'none';
+            if (e.target === numbersModal) numbersModal.style.display = 'none';
+            if (e.target === notificationsModal) notificationsModal.style.display = 'none';
+            if (e.target === successModal) successModal.style.display = 'none';
+            if (e.target === adminLoginModal) adminLoginModal.style.display = 'none';
         });
 
         // Admin login form
@@ -1016,8 +1122,9 @@
                 showAdminPanel();
                 adminLoginBtn.innerHTML = '<i class="fas fa-cogs"></i> لوحة التحكم';
                 loadAdminRequests();
+                showToast('تم تسجيل الدخول بنجاح!');
             } else {
-                alert('اسم المستخدم أو كلمة المرور غير صحيحة!');
+                showToast('اسم المستخدم أو كلمة المرور غير صحيحة!', true);
             }
         });
 
@@ -1029,39 +1136,91 @@
 
         // تحميل طلبات الأدمن
         function loadAdminRequests() {
+            const requests = SERVER_STORAGE.get('requests');
             requestsContainer.innerHTML = '';
-            SERVER_DATA.requests.forEach(request => {
+
+            if (requests.length === 0) {
+                requestsContainer.innerHTML = '<p style="text-align: center; color: #777;">لا توجد طلبات جديدة</p>';
+                return;
+            }
+
+            requests.forEach(request => {
                 const requestElement = document.createElement('div');
                 requestElement.className = 'request-item';
                 requestElement.innerHTML = `
-                    <div>
+                    <div class="request-info">
                         <strong>${request.name}</strong> - 
                         ${request.type === 'account' ? 'طلب إنشاء حساب' : `طلب أرقام (${request.country})`}
-                        <br><small>${request.date}</small>
+                        <br><small>${request.timestamp}</small>
+                        ${request.phone ? `<br><small>${request.phone}</small>` : ''}
+                        ${request.quantity ? `<br><small>الكمية: ${request.quantity}</small>` : ''}
                     </div>
                     <div class="request-actions">
-                        <button class="btn accept-btn" style="padding: 5px 10px; background: #2ecc71;">قبول</button>
-                        <button class="btn reject-btn" style="padding: 5px 10px; background: #e74c3c;">رفض</button>
+                        <button class="btn accept-btn" style="padding: 6px 12px; background: #2ecc71;">قبول</button>
+                        <button class="btn reject-btn" style="padding: 6px 12px; background: #e74c3c;">رفض</button>
                     </div>
                 `;
                 requestsContainer.appendChild(requestElement);
             });
 
             // إضافة event listeners للأزرار
-            document.querySelectorAll('.accept-btn').forEach(btn => {
+            document.querySelectorAll('.accept-btn').forEach((btn, index) => {
                 btn.addEventListener('click', function() {
-                    const requestItem = this.closest('.request-item');
-                    alert('تم قبول الطلب بنجاح!');
-                    requestItem.remove();
+                    const requests = SERVER_STORAGE.get('requests');
+                    const acceptedRequest = requests.splice(index, 1)[0];
+                    SERVER_STORAGE.set('requests', requests);
+                    
+                    // إضافة إشعار بالقبول
+                    SERVER_STORAGE.add('notifications', {
+                        message: `تم قبول طلب ${acceptedRequest.name}`,
+                        type: 'success'
+                    });
+                    
+                    loadAdminRequests();
+                    updateNotificationBadge();
+                    showToast('تم قبول الطلب بنجاح!');
                 });
             });
 
-            document.querySelectorAll('.reject-btn').forEach(btn => {
+            document.querySelectorAll('.reject-btn').forEach((btn, index) => {
                 btn.addEventListener('click', function() {
-                    const requestItem = this.closest('.request-item');
-                    alert('تم رفض الطلب!');
-                    requestItem.remove();
+                    const requests = SERVER_STORAGE.get('requests');
+                    const rejectedRequest = requests.splice(index, 1)[0];
+                    SERVER_STORAGE.set('requests', requests);
+                    
+                    // إضافة إشعار بالرفض
+                    SERVER_STORAGE.add('notifications', {
+                        message: `تم رفض طلب ${rejectedRequest.name}`,
+                        type: 'error'
+                    });
+                    
+                    loadAdminRequests();
+                    updateNotificationBadge();
+                    showToast('تم رفض الطلب!');
                 });
+            });
+        }
+
+        // تحديث الإشعارات
+        function loadNotifications() {
+            const notifications = SERVER_STORAGE.get('notifications');
+            notificationsList.innerHTML = '';
+
+            if (notifications.length === 0) {
+                notificationsList.innerHTML = '<p style="text-align: center; color: #777;">لا توجد إشعارات</p>';
+                return;
+            }
+
+            notifications.forEach(notification => {
+                const notificationElement = document.createElement('div');
+                notificationElement.className = 'request-item';
+                notificationElement.innerHTML = `
+                    <div>
+                        <strong>${notification.message}</strong>
+                        <br><small>${notification.timestamp}</small>
+                    </div>
+                `;
+                notificationsList.appendChild(notificationElement);
             });
         }
 
@@ -1070,7 +1229,7 @@
             isAdminLoggedIn = false;
             adminPanel.style.display = 'none';
             adminLoginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> دخول الأدمن';
-            alert('تم تسجيل الخروج بنجاح');
+            showToast('تم تسجيل الخروج بنجاح');
         });
 
         // Form submissions
@@ -1079,17 +1238,27 @@
             const userName = document.getElementById('userName').value;
             const userPhone = document.getElementById('userPhone').value;
             
-            // إضافة الطلب إلى البيانات
-            SERVER_DATA.requests.unshift({
-                id: SERVER_DATA.requests.length + 1,
+            // إضافة الطلب إلى التخزين
+            SERVER_STORAGE.add('requests', {
                 type: 'account',
                 name: userName,
-                phone: userPhone,
-                date: new Date().toISOString().split('T')[0]
+                phone: userPhone
+            });
+
+            // إضافة إشعار جديد
+            SERVER_STORAGE.add('notifications', {
+                message: `طلب جديد: ${userName} - إنشاء حساب`,
+                type: 'info'
             });
 
             accountModal.style.display = 'none';
             successModal.style.display = 'flex';
+            
+            // تحديث البيانات
+            updateNotificationBadge();
+            if (isAdminLoggedIn) {
+                loadAdminRequests();
+            }
             
             // Reset form
             accountForm.reset();
@@ -1107,18 +1276,29 @@
             const quantity = document.getElementById('quantity').value;
             const accountName = document.getElementById('accountName').value;
             
-            // إضافة الطلب إلى البيانات
-            SERVER_DATA.requests.unshift({
-                id: SERVER_DATA.requests.length + 1,
+            // إضافة الطلب إلى التخزين
+            SERVER_STORAGE.add('requests', {
                 type: 'numbers',
                 name: accountName,
                 country: country,
                 quantity: quantity,
-                date: new Date().toISOString().split('T')[0]
+                range: range
+            });
+
+            // إضافة إشعار جديد
+            SERVER_STORAGE.add('notifications', {
+                message: `طلب جديد: ${accountName} - أرقام (${country})`,
+                type: 'info'
             });
 
             numbersModal.style.display = 'none';
             successModal.style.display = 'flex';
+            
+            // تحديث البيانات
+            updateNotificationBadge();
+            if (isAdminLoggedIn) {
+                loadAdminRequests();
+            }
             
             // Reset form
             numbersForm.reset();
@@ -1131,7 +1311,7 @@
 
         // Notifications
         enableNotificationsBtn.addEventListener('click', () => {
-            alert('تم تفعيل الإشعارات بنجاح!');
+            showToast('تم تفعيل الإشعارات بنجاح!');
             notificationsModal.style.display = 'none';
         });
 
@@ -1160,6 +1340,14 @@
                 chatInput.value = '';
                 chatMessages.scrollTop = chatMessages.scrollHeight;
                 
+                // إضافة رسالة الدعم إلى النظام
+                SERVER_STORAGE.add('notifications', {
+                    message: `رسالة دعم جديدة: ${message}`,
+                    type: 'support'
+                });
+                
+                updateNotificationBadge();
+                
                 // Simulate admin response after a delay
                 setTimeout(() => {
                     const responseElement = document.createElement('div');
@@ -1180,11 +1368,19 @@
             const schedule = document.getElementById('messageSchedule').value;
             
             if (message) {
-                alert(`تم إرسال الرسالة بنجاح!${schedule ? '\nموعد الإرسال: ' + schedule : ''}`);
+                // إضافة الرسالة إلى النظام
+                SERVER_STORAGE.add('notifications', {
+                    message: `رسالة أدمن: ${message}`,
+                    type: 'admin',
+                    schedule: schedule
+                });
+                
+                showToast(`تم إرسال الرسالة بنجاح!${schedule ? '\nموعد الإرسال: ' + schedule : ''}`);
                 document.getElementById('adminMessage').value = '';
                 document.getElementById('messageSchedule').value = '';
+                updateNotificationBadge();
             } else {
-                alert('يرجى كتابة رسالة أولاً');
+                showToast('يرجى كتابة رسالة أولاً', true);
             }
         });
 
@@ -1211,7 +1407,10 @@
         });
 
         // Initialize data when page loads
-        document.addEventListener('DOMContentLoaded', initializeData);
+        document.addEventListener('DOMContentLoaded', () => {
+            updateNotificationBadge();
+            loadNotifications();
+        });
     </script>
 </body>
 </html>
