@@ -1,130 +1,214 @@
-
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
-const fs = require('fs');
-const bodyParser = require('body-parser');
-const session = require('express-session');
-const http = require('http');
-const { Server } = require('socket.io');
 
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
-
 const PORT = process.env.PORT || 3000;
-const DB = path.join(__dirname, 'db.json');
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({ secret: 'ims_final_v4_secret', resave: false, saveUninitialized: true }));
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.static('.'));
 
-function readDB(){ if(!fs.existsSync(DB)) return {countries:[],orders:[]}; return JSON.parse(fs.readFileSync(DB)); }
-function writeDB(d){ fs.writeFileSync(DB, JSON.stringify(d,null,2),'utf-8'); }
+// تخزين البيانات في الذاكرة (في production استخدم قاعدة بيانات حقيقية)
+let requests = [];
+let notifications = [];
+let supportMessages = [];
 
-app.get('/', (req,res)=> res.sendFile(path.join(__dirname,'public','index.html')));
-app.get('/login', (req,res)=> res.sendFile(path.join(__dirname,'public','login.html')));
-app.get('/admin', (req,res)=>{
-  if(!req.session.user || req.session.user.role!=='admin') return res.redirect('/login');
-  res.sendFile(path.join(__dirname,'public','admin.html'));
+// Routes
+// الحصول على جميع الطلبات
+app.get('/api/requests', (req, res) => {
+    res.json({
+        success: true,
+        requests: requests.reverse() // أحدث الطلبات أولاً
+    });
 });
 
-// APIs
-app.get('/api/countries',(req,res)=>{ const db=readDB(); res.json(db.countries); });
-
-app.post('/api/countries',(req,res)=>{
-  if(!req.session.user || req.session.user.role!=='admin') return res.status(403).json({error:'forbidden'});
-  const {name,code} = req.body;
-  const db = readDB();
-  const id = db.countries.length ? Math.max(...db.countries.map(c=>c.id))+1 : 1;
-  db.countries.push({id,name,code,ranges:[]});
-  writeDB(db);
-  io.emit('countriesUpdated', db.countries);
-  res.json({ok:true});
+// إضافة طلب جديد
+app.post('/api/requests', (req, res) => {
+    const { type, name, phone, country, quantity, range } = req.body;
+    
+    const newRequest = {
+        id: Date.now().toString(),
+        type,
+        name,
+        phone: phone || null,
+        country: country || null,
+        quantity: quantity || null,
+        range: range || null,
+        status: 'pending',
+        timestamp: new Date().toISOString()
+    };
+    
+    requests.push(newRequest);
+    
+    // إضافة إشعار جديد
+    const notificationMessage = type === 'account' 
+        ? `طلب جديد: ${name} - إنشاء حساب`
+        : `طلب جديد: ${name} - أرقام (${country})`;
+    
+    const newNotification = {
+        id: Date.now().toString(),
+        message: notificationMessage,
+        type: 'request',
+        timestamp: new Date().toISOString()
+    };
+    
+    notifications.push(newNotification);
+    
+    res.json({
+        success: true,
+        message: 'تم إرسال الطلب بنجاح',
+        request: newRequest
+    });
 });
 
-app.post('/api/countries/:id/ranges',(req,res)=>{
-  if(!req.session.user || req.session.user.role!=='admin') return res.status(403).json({error:'forbidden'});
-  const id = Number(req.params.id);
-  const {range} = req.body;
-  const db = readDB();
-  const country = db.countries.find(c=>c.id===id);
-  if(!country) return res.status(404).json({error:'not found'});
-  country.ranges.push(range);
-  writeDB(db);
-  io.emit('countriesUpdated', db.countries);
-  res.json({ok:true});
+// معالجة طلب (قبول/رفض)
+app.post('/api/requests/:id/:action', (req, res) => {
+    const { id, action } = req.params;
+    const requestIndex = requests.findIndex(req => req.id === id);
+    
+    if (requestIndex === -1) {
+        return res.status(404).json({
+            success: false,
+            message: 'الطلب غير موجود'
+        });
+    }
+    
+    if (action === 'accept') {
+        requests[requestIndex].status = 'accepted';
+        
+        // إضافة إشعار بالقبول
+        const acceptNotification = {
+            id: Date.now().toString(),
+            message: `تم قبول طلب ${requests[requestIndex].name}`,
+            type: 'success',
+            timestamp: new Date().toISOString()
+        };
+        notifications.push(acceptNotification);
+        
+    } else if (action === 'reject') {
+        requests[requestIndex].status = 'rejected';
+        
+        // إضافة إشعار بالرفض
+        const rejectNotification = {
+            id: Date.now().toString(),
+            message: `تم رفض طلب ${requests[requestIndex].name}`,
+            type: 'error',
+            timestamp: new Date().toISOString()
+        };
+        notifications.push(rejectNotification);
+    }
+    
+    res.json({
+        success: true,
+        message: `تم ${action === 'accept' ? 'قبول' : 'رفض'} الطلب بنجاح`
+    });
 });
 
-app.delete('/api/countries/:id/ranges',(req,res)=>{
-  if(!req.session.user || req.session.user.role!=='admin') return res.status(403).json({error:'forbidden'});
-  const id = Number(req.params.id);
-  const {range} = req.body;
-  const db = readDB();
-  const country = db.countries.find(c=>c.id===id);
-  if(!country) return res.status(404).json({error:'not found'});
-  country.ranges = country.ranges.filter(r=>r!==range);
-  writeDB(db);
-  io.emit('countriesUpdated', db.countries);
-  res.json({ok:true});
+// الحصول على الإشعارات
+app.get('/api/notifications', (req, res) => {
+    res.json({
+        success: true,
+        notifications: notifications.reverse() // أحدث الإشعارات أولاً
+    });
 });
 
-app.post('/api/request-number',(req,res)=>{
-  const {countryId,count,username,range} = req.body;
-  const db = readDB();
-  const order = { id: db.orders.length+1, type:'number', countryId:Number(countryId), count:Number(count), username:username||null, range: range||null, status:'pending', createdAt:new Date().toISOString() };
-  db.orders.push(order);
-  writeDB(db);
-  io.emit('newOrder', order);
-  res.json({message:'قيد التنفيذ', orderId:order.id});
+// عدد الإشعارات
+app.get('/api/notifications/count', (req, res) => {
+    res.json({
+        success: true,
+        count: notifications.length
+    });
 });
 
-app.post('/api/request-user',(req,res)=>{
-  const {fullname,whatsapp} = req.body;
-  const db = readDB();
-  const order = { id: db.orders.length+1, type:'user', fullname, whatsapp, status:'pending', createdAt:new Date().toISOString() };
-  db.orders.push(order);
-  writeDB(db);
-  io.emit('newOrder', order);
-  res.json({message:'قيد التنفيذ', orderId:order.id});
+// إرسال رسالة دعم
+app.post('/api/support', (req, res) => {
+    const { message } = req.body;
+    
+    const supportMessage = {
+        id: Date.now().toString(),
+        message,
+        timestamp: new Date().toISOString()
+    };
+    
+    supportMessages.push(supportMessage);
+    
+    // إضافة إشعار برسالة الدعم
+    const supportNotification = {
+        id: Date.now().toString(),
+        message: `رسالة دعم جديدة: ${message.substring(0, 50)}...`,
+        type: 'support',
+        timestamp: new Date().toISOString()
+    };
+    
+    notifications.push(supportNotification);
+    
+    res.json({
+        success: true,
+        message: 'تم إرسال رسالة الدعم بنجاح'
+    });
 });
 
-app.get('/api/orders',(req,res)=>{
-  if(!req.session.user || req.session.user.role!=='admin') return res.status(403).json({error:'forbidden'});
-  const db = readDB();
-  res.json(db.orders);
+// إرسال رسالة أدمن
+app.post('/api/admin/message', (req, res) => {
+    const { message, schedule } = req.body;
+    
+    const adminMessage = {
+        id: Date.now().toString(),
+        message,
+        schedule: schedule || null,
+        timestamp: new Date().toISOString()
+    };
+    
+    // إضافة إشعار برسالة الأدمن
+    const adminNotification = {
+        id: Date.now().toString(),
+        message: `رسالة أدمن: ${message.substring(0, 50)}...`,
+        type: 'admin',
+        timestamp: new Date().toISOString()
+    };
+    
+    notifications.push(adminNotification);
+    
+    res.json({
+        success: true,
+        message: 'تم إرسال الرسالة بنجاح'
+    });
 });
 
-app.post('/api/orders/:id/execute',(req,res)=>{
-  if(!req.session.user || req.session.user.role!=='admin') return res.status(403).json({error:'forbidden'});
-  const id = Number(req.params.id);
-  const db = readDB();
-  const order = db.orders.find(o=>o.id===id);
-  if(!order) return res.status(404).json({error:'not found'});
-  order.status='done';
-  order.executedAt = new Date().toISOString();
-  writeDB(db);
-  io.emit('orderExecuted', order);
-  res.json({ok:true});
+// الحصول على رسائل الدعم
+app.get('/api/support', (req, res) => {
+    res.json({
+        success: true,
+        messages: supportMessages.reverse()
+    });
 });
 
-// admin login
-const ADMIN_USER = 'Mohamed77ngq';
-const ADMIN_PASS = 'Mohamed77ngq';
-app.post('/api/admin/login',(req,res)=>{
-  const {username,password} = req.body;
-  if(username===ADMIN_USER && password===ADMIN_PASS){
-    req.session.user = {username, role:'admin'};
-    return res.json({ok:true});
-  }
-  res.status(401).json({error:'invalid'});
+// Route for serving the main page
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.post('/api/admin/logout',(req,res)=>{ req.session.destroy(()=>res.json({ok:true})); });
-
-io.on('connection', socket => {
-  const db = readDB();
-  socket.emit('init', {countries: db.countries, orders: db.orders});
+// Start server
+app.listen(PORT, () => {
+    console.log(`🚀 Server is running on http://localhost:${PORT}`);
+    console.log(`📧 API endpoints available at http://localhost:${PORT}/api`);
 });
 
-server.listen(PORT, ()=> console.log(`Server listening on http://localhost:${PORT}`));
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({
+        success: false,
+        message: 'حدث خطأ في السيرفر'
+    });
+});
+
+// Handle 404
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message: 'Endpoint غير موجود'
+    });
+});
