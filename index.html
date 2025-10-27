@@ -6,6 +6,7 @@
     <title>AB - تفعيل الأرقام</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* نفس الـ CSS السابق - اختصرته للتقليل */
         :root {
             --primary-red: #e74c3c;
             --primary-blue: #3498db;
@@ -44,13 +45,10 @@
             padding: 0 20px;
         }
 
-        /* Header Styles */
         header {
             background: linear-gradient(135deg, var(--primary-red), var(--primary-blue));
             padding: 20px 0;
             box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
         }
 
         .logo {
@@ -68,13 +66,11 @@
 
         .logo-a {
             color: var(--primary-red);
-            text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
             animation: pulse 2s infinite;
         }
 
         .logo-b {
             color: var(--primary-blue);
-            text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
             animation: pulse 2s infinite 0.5s;
         }
 
@@ -111,7 +107,6 @@
 
         .nav-icon:hover {
             transform: translateY(-5px);
-            background-color: rgba(255, 255, 255, 0.3);
         }
 
         .notification-badge {
@@ -129,7 +124,6 @@
             align-items: center;
         }
 
-        /* Main Content */
         .hero {
             display: flex;
             flex-wrap: wrap;
@@ -146,7 +140,6 @@
 
         .hero-image img {
             max-width: 100%;
-            height: auto;
             border-radius: 15px;
             box-shadow: var(--shadow);
             animation: float 6s ease-in-out infinite;
@@ -169,12 +162,6 @@
             background: linear-gradient(135deg, var(--primary-red), var(--primary-blue));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-
-        .hero-content p {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            margin-bottom: 25px;
         }
 
         .features {
@@ -201,18 +188,6 @@
             transform: translateY(-10px);
         }
 
-        .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            color: var(--primary-blue);
-        }
-
-        .feature-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-
-        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -224,12 +199,6 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
         }
 
         .modal-content {
@@ -240,16 +209,10 @@
             max-width: 500px;
             box-shadow: var(--shadow);
             position: relative;
-            animation: slideUp 0.3s ease;
         }
 
         body.dark-mode .modal-content {
             background-color: var(--dark-card);
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
         }
 
         .close-modal {
@@ -261,12 +224,6 @@
             color: var(--primary-red);
         }
 
-        .modal h2 {
-            margin-bottom: 25px;
-            text-align: center;
-            font-size: 1.8rem;
-        }
-
         .form-group {
             margin-bottom: 20px;
         }
@@ -275,36 +232,21 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: var(--light-text);
         }
 
-        body.dark-mode .form-group label {
-            color: var(--dark-text);
-        }
-
-        .form-group input, .form-group textarea, .form-group select {
+        .form-group input {
             width: 100%;
             padding: 12px 15px;
             border: 2px solid #ddd;
             border-radius: 8px;
             font-size: 1rem;
             transition: var(--transition);
-            background-color: var(--light-card);
-            color: var(--light-text);
         }
 
-        body.dark-mode .form-group input, 
-        body.dark-mode .form-group textarea, 
-        body.dark-mode .form-group select {
+        body.dark-mode .form-group input {
             background-color: var(--dark-card);
             border-color: #555;
             color: var(--dark-text);
-        }
-
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
         }
 
         .btn {
@@ -318,13 +260,10 @@
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            text-align: center;
-            text-decoration: none;
         }
 
         .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
 
         .btn-block {
@@ -332,242 +271,21 @@
             width: 100%;
         }
 
-        /* Success Animation */
-        .success-animation {
-            text-align: center;
-            padding: 30px;
-        }
-
-        .success-animation i {
-            font-size: 4rem;
-            color: #2ecc71;
-            margin-bottom: 20px;
-            animation: bounce 1s ease;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-            40% {transform: translateY(-20px);}
-            60% {transform: translateY(-10px);}
-        }
-
-        /* Chat Widget */
-        .chat-widget {
+        .admin-login-btn {
             position: fixed;
-            bottom: 30px;
-            left: 30px;
-            z-index: 999;
-        }
-
-        .chat-icon {
-            width: 60px;
-            height: 60px;
+            top: 20px;
+            left: 20px;
             background: linear-gradient(135deg, var(--primary-red), var(--primary-blue));
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            animation: pulse 2s infinite;
-        }
-
-        .chat-icon:hover {
-            transform: scale(1.1);
-        }
-
-        .chat-icon i {
-            font-size: 1.5rem;
-            color: white;
-        }
-
-        .chat-box {
-            position: absolute;
-            bottom: 70px;
-            left: 0;
-            width: 350px;
-            background-color: var(--light-card);
-            border-radius: 15px;
-            box-shadow: var(--shadow);
-            display: none;
-            overflow: hidden;
-        }
-
-        body.dark-mode .chat-box {
-            background-color: var(--dark-card);
-        }
-
-        .chat-header {
-            background: linear-gradient(135deg, var(--primary-red), var(--primary-blue));
-            color: white;
-            padding: 15px 20px;
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        .chat-messages {
-            padding: 15px;
-            height: 200px;
-            overflow-y: auto;
-            font-size: 0.9rem;
-        }
-
-        .chat-input {
-            display: flex;
-            padding: 15px;
-            border-top: 2px solid #eee;
-            gap: 10px;
-        }
-
-        body.dark-mode .chat-input {
-            border-top-color: #444;
-        }
-
-        .chat-input input {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            background-color: var(--light-card);
-            color: var(--light-text);
-        }
-
-        body.dark-mode .chat-input input {
-            background-color: var(--dark-card);
-            border-color: #555;
-            color: var(--dark-text);
-        }
-
-        .chat-input button {
-            background: var(--primary-blue);
             color: white;
             border: none;
             border-radius: 8px;
-            padding: 12px 15px;
+            padding: 10px 20px;
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: var(--transition);
-        }
-
-        .chat-input button:hover {
-            background: var(--primary-red);
-        }
-
-        /* Admin Panel */
-        .admin-panel {
-            background-color: var(--light-card);
-            border-radius: 15px;
-            padding: 30px;
-            margin: 40px 0;
+            font-weight: 600;
+            z-index: 999;
             box-shadow: var(--shadow);
-            display: none;
         }
 
-        body.dark-mode .admin-panel {
-            background-color: var(--dark-card);
-        }
-
-        .admin-panel h2 {
-            margin-bottom: 25px;
-            color: var(--primary-red);
-            font-size: 1.8rem;
-            text-align: center;
-        }
-
-        .requests-list {
-            margin-bottom: 30px;
-        }
-
-        .requests-list h3 {
-            margin-bottom: 20px;
-            color: var(--primary-blue);
-            font-size: 1.3rem;
-        }
-
-        .request-item {
-            background-color: rgba(0, 0, 0, 0.05);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: var(--transition);
-        }
-
-        body.dark-mode .request-item {
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-
-        .request-item:hover {
-            transform: translateX(-5px);
-        }
-
-        .request-info {
-            flex: 1;
-        }
-
-        .request-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .request-actions button {
-            padding: 8px 15px;
-            font-size: 0.85rem;
-        }
-
-        .admin-message-form {
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 2px solid #eee;
-        }
-
-        body.dark-mode .admin-message-form {
-            border-top-color: #444;
-        }
-
-        /* Login Modal */
-        .login-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1001;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .login-content {
-            background-color: var(--light-card);
-            border-radius: 15px;
-            padding: 30px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: var(--shadow);
-            position: relative;
-        }
-
-        body.dark-mode .login-content {
-            background-color: var(--dark-card);
-        }
-
-        .login-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .login-header .logo-text {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-        }
-
-        /* Theme Toggle */
         .theme-toggle {
             position: fixed;
             top: 20px;
@@ -582,35 +300,35 @@
             cursor: pointer;
             box-shadow: var(--shadow);
             z-index: 999;
-            transition: var(--transition);
         }
 
-        body.dark-mode .theme-toggle {
+        .admin-panel {
+            background-color: var(--light-card);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: var(--shadow);
+            display: none;
+        }
+
+        body.dark-mode .admin-panel {
             background-color: var(--dark-card);
         }
 
-        /* Admin Login Button */
-        .admin-login-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: linear-gradient(135deg, var(--primary-red), var(--primary-blue));
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-weight: 600;
-            z-index: 999;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
+        .request-item {
+            background-color: rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .admin-login-btn:hover {
-            transform: translateY(-2px);
+        body.dark-mode .request-item {
+            background-color: rgba(255, 255, 255, 0.05);
         }
 
-        /* Toast Notifications */
         .toast {
             position: fixed;
             top: 20px;
@@ -633,89 +351,24 @@
             background: #e74c3c;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
-            .container {
-                padding: 0 15px;
-            }
-            
-            .logo-text {
-                font-size: 3rem;
-            }
-            
-            .hero {
-                padding: 40px 0;
-                gap: 30px;
-            }
-            
-            .hero-image,
-            .hero-content {
-                min-width: 100%;
-            }
-            
-            .features {
-                grid-template-columns: 1fr;
-                gap: 20px;
-                margin: 40px 0;
-            }
-            
-            .chat-box {
-                width: 300px;
-                left: -120px;
-            }
-            
-            .admin-login-btn {
-                top: 80px;
-            }
-            
-            .request-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-            
-            .request-actions {
-                width: 100%;
-                justify-content: flex-end;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero {
-                padding: 30px 0;
-            }
-            
-            .modal-content {
-                padding: 20px;
-            }
-            
-            .chat-box {
-                width: 280px;
-                left: -110px;
-            }
-            
-            .admin-login-btn {
-                padding: 8px 15px;
-                font-size: 0.9rem;
-            }
+            .logo-text { font-size: 3rem; }
+            .hero { padding: 40px 0; gap: 30px; }
+            .hero-image, .hero-content { min-width: 100%; }
         }
     </style>
 </head>
 <body>
-    <!-- Admin Login Button -->
     <button class="admin-login-btn" id="adminLoginBtn">
         <i class="fas fa-sign-in-alt"></i> دخول الأدمن
     </button>
 
-    <!-- Theme Toggle -->
     <div class="theme-toggle" id="themeToggle">
         <i class="fas fa-moon"></i>
     </div>
 
-    <!-- Toast Notification -->
     <div class="toast" id="toast"></div>
 
-    <!-- Header -->
     <header>
         <div class="container">
             <div class="logo">
@@ -741,65 +394,53 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="container">
         <section class="hero">
             <div class="hero-image">
-                <img src="https://imssms.org/assets/images/5.png" alt="خدمات تفعيل الأرقام" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNjY3ZWVhIi8+CiAgPHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj7Yp9mE2YXYs9in2KEg2KfZhNi52YbYr9ipINin2YTYqtmK2YYg2KfZhNmF2KfZh9ivPC90ZXh0Pgo8L3N2Zz4K'">
+                <img src="https://imssms.org/assets/images/5.png" alt="خدمات تفعيل الأرقام">
             </div>
             <div class="hero-content">
                 <h2>تفعيل الأرقام لجميع التطبيقات</h2>
-                <p>
-                    شغلنا عبارة عن أرقام بنحطها لك في المنصة، وانت بتاخد الأرقام وبتروح تفعلها في التطبيقات والمواقع. 
-                    الهدف تجربة الأرقام ونشوفها شغالة وهكذا. نحن نقدم خدمة موثوقة وسريعة لتفعيل حساباتك على مختلف المنصات.
-                </p>
+                <p>شغلنا عبارة عن أرقام بنحطها لك في المنصة، وانت بتاخد الأرقام وبتروح تفعلها في التطبيقات والمواقع.</p>
                 <button class="btn" id="learnMoreBtn">اعرف المزيد</button>
             </div>
         </section>
 
         <section class="features">
             <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-bolt"></i>
-                </div>
+                <i class="fas fa-bolt feature-icon"></i>
                 <h3>خدمة سريعة</h3>
                 <p>نوفر أرقام تفعيل فورية لأهم التطبيقات والمنصات</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
+                <i class="fas fa-shield-alt feature-icon"></i>
                 <h3>آمن وموثوق</h3>
                 <p>جميع الأرقام مضمونة وتعمل بشكل صحيح</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-headset"></i>
-                </div>
+                <i class="fas fa-headset feature-icon"></i>
                 <h3>دعم فني</h3>
                 <p>فريق دعم فني متاح لمساعدتك على مدار الساعة</p>
             </div>
         </section>
 
-        <!-- Admin Panel (Visible only after login) -->
         <section class="admin-panel" id="adminPanel">
             <h2><i class="fas fa-cogs"></i> لوحة التحكم</h2>
             
             <div class="requests-list">
                 <h3>الطلبات الجديدة</h3>
                 <div id="requestsContainer">
-                    <!-- الطلبات سيتم تحميلها هنا -->
+                    <div style="text-align: center; color: #777; padding: 40px;">
+                        <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 15px; color: #ddd;"></i>
+                        <h3>لا توجد طلبات جديدة</h3>
+                    </div>
                 </div>
             </div>
             
             <div class="admin-message-form">
                 <h3>إرسال رسالة للمستخدمين</h3>
                 <div class="form-group">
-                    <textarea id="adminMessage" rows="3" placeholder="اكتب رسالة للمستخدمين..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label>تاريخ الإرسال:</label>
-                    <input type="datetime-local" id="messageSchedule">
+                    <textarea id="adminMessage" rows="3" placeholder="اكتب رسالة للمستخدمين..." class="form-group input"></textarea>
                 </div>
                 <button class="btn btn-block" id="sendMessageBtn">إرسال الرسالة</button>
             </div>
@@ -812,29 +453,7 @@
         </section>
     </main>
 
-    <!-- Chat Widget -->
-    <div class="chat-widget">
-        <div class="chat-icon" id="chatIcon">
-            <i class="fas fa-comment-dots"></i>
-        </div>
-        <div class="chat-box" id="chatBox">
-            <div class="chat-header">
-                🌟 مرحبًا بكم في الدعم AB
-            </div>
-            <div class="chat-messages" id="chatMessages">
-                <div class="message" style="margin-bottom: 10px; padding: 10px; background: #f1f1f1; border-radius: 8px;">
-                    📲 تفعيل أرقام لجميع التطبيقات<br>
-                    💬 هل تواجه مشكلة في تفعيل الأرقام على التطبيقات؟ لا تقلق نحن هنا للمساعدة ✅
-                </div>
-            </div>
-            <div class="chat-input">
-                <input type="text" id="chatInput" placeholder="اكتب رسالتك...">
-                <button id="sendChatBtn"><i class="fas fa-paper-plane"></i></button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Account Modal -->
+    <!-- Modals -->
     <div class="modal" id="accountModal">
         <div class="modal-content">
             <span class="close-modal" id="closeAccountModal">&times;</span>
@@ -853,7 +472,6 @@
         </div>
     </div>
 
-    <!-- Numbers Modal -->
     <div class="modal" id="numbersModal">
         <div class="modal-content">
             <span class="close-modal" id="closeNumbersModal">&times;</span>
@@ -869,7 +487,7 @@
                 </div>
                 <div class="form-group">
                     <label for="quantity">عدد الأرقام</label>
-                    <input type="number" id="quantity" required placeholder="مثال: 5" min="1" max="100">
+                    <input type="number" id="quantity" required placeholder="مثال: 5" min="1">
                 </div>
                 <div class="form-group">
                     <label for="accountName">اسم حسابك</label>
@@ -880,37 +498,20 @@
         </div>
     </div>
 
-    <!-- Success Modal -->
     <div class="modal" id="successModal">
         <div class="modal-content">
-            <div class="success-animation">
-                <i class="fas fa-check-circle"></i>
+            <div style="text-align: center; padding: 30px;">
+                <i class="fas fa-check-circle" style="font-size: 4rem; color: #2ecc71; margin-bottom: 20px;"></i>
                 <h2>تم الإرسال بنجاح!</h2>
                 <p>سيتم مراجعة طلبك قريباً</p>
             </div>
         </div>
     </div>
 
-    <!-- Notifications Modal -->
-    <div class="modal" id="notificationsModal">
+    <div class="modal" id="adminLoginModal">
         <div class="modal-content">
-            <span class="close-modal" id="closeNotificationsModal">&times;</span>
-            <h2><i class="fas fa-bell"></i> الإشعارات</h2>
-            <div class="form-group">
-                <p>تفعيل إشعارات الموقع؟</p>
-                <button class="btn btn-block" id="enableNotificationsBtn">تفعيل الإشعارات</button>
-            </div>
-            <div id="notificationsList">
-                <!-- الإشعارات سيتم تحميلها هنا -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Admin Login Modal -->
-    <div class="login-modal" id="adminLoginModal">
-        <div class="login-content">
-            <div class="login-header">
-                <div class="logo-text">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <div class="logo-text" style="font-size: 2.5rem;">
                     <span class="logo-a">A</span>
                     <span class="logo-b">B</span>
                 </div>
@@ -931,61 +532,38 @@
     </div>
 
     <script>
-        // بيانات الاعتماد الثابتة
+        // Netlify Functions base URL
+        const API_BASE_URL = '/.netlify/functions/api';
+
         const ADMIN_CREDENTIALS = {
             username: 'test',
             password: 'test'
         };
 
-        // نظام التخزين المحلي (يعمل بدون سيرفر)
-        const LOCAL_STORAGE = {
-            get: (key) => {
-                try {
-                    const data = localStorage.getItem(key);
-                    return data ? JSON.parse(data) : [];
-                } catch {
-                    return [];
-                }
-            },
-            set: (key, data) => {
-                try {
-                    localStorage.setItem(key, JSON.stringify(data));
-                } catch (error) {
-                    console.error('Error saving to localStorage:', error);
-                }
-            },
-            add: (key, item) => {
-                const data = LOCAL_STORAGE.get(key);
-                const newItem = {
-                    id: Date.now().toString(),
-                    ...item,
-                    timestamp: new Date().toISOString()
-                };
-                data.unshift(newItem);
-                LOCAL_STORAGE.set(key, data);
-                return newItem;
-            }
-        };
-
-        // حالة المستخدم
         let isAdminLoggedIn = false;
 
-        // Theme Toggle
-        const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = themeToggle.querySelector('i');
-        
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            if (document.body.classList.contains('dark-mode')) {
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
-            } else {
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
+        // API Functions
+        async function apiRequest(endpoint, options = {}) {
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    ...options
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('API request failed:', error);
+                showToast('حدث خطأ في الاتصال بالسيرفر', true);
+                throw error;
             }
-        });
+        }
 
-        // Toast Notification
         function showToast(message, isError = false) {
             const toast = document.getElementById('toast');
             toast.textContent = message;
@@ -996,74 +574,121 @@
             }, 3000);
         }
 
-        // تحديث العداد
-        function updateNotificationBadge() {
-            const notifications = LOCAL_STORAGE.get('notifications');
-            const badge = document.getElementById('notificationBadge');
-            badge.textContent = notifications.length;
+        async function updateNotificationBadge() {
+            try {
+                const data = await apiRequest('/notifications/count');
+                const badge = document.getElementById('notificationBadge');
+                badge.textContent = data.count;
+                badge.style.display = data.count > 0 ? 'flex' : 'none';
+            } catch (error) {
+                console.error('Error updating notification badge:', error);
+            }
         }
 
-        // Modal Controls
+        async function loadAdminRequests() {
+            try {
+                const data = await apiRequest('/requests');
+                const requestsContainer = document.getElementById('requestsContainer');
+                requestsContainer.innerHTML = '';
+
+                if (!data.requests || data.requests.length === 0) {
+                    requestsContainer.innerHTML = `
+                        <div style="text-align: center; color: #777; padding: 40px;">
+                            <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 15px; color: #ddd;"></i>
+                            <h3>لا توجد طلبات جديدة</h3>
+                        </div>
+                    `;
+                    return;
+                }
+
+                data.requests.forEach(request => {
+                    const requestElement = document.createElement('div');
+                    requestElement.className = 'request-item';
+                    requestElement.innerHTML = `
+                        <div class="request-info">
+                            <strong>${request.name}</strong> - 
+                            ${request.type === 'account' ? 'طلب إنشاء حساب' : `طلب أرقام (${request.country})`}
+                            <br><small>${new Date(request.timestamp).toLocaleString('ar-EG')}</small>
+                            ${request.phone ? `<br><small>${request.phone}</small>` : ''}
+                        </div>
+                        ${request.status === 'pending' ? `
+                            <div class="request-actions">
+                                <button class="btn accept-btn" data-id="${request.id}">قبول</button>
+                                <button class="btn reject-btn" data-id="${request.id}" style="background: #e74c3c;">رفض</button>
+                            </div>
+                        ` : ''}
+                    `;
+                    requestsContainer.appendChild(requestElement);
+                });
+
+                document.querySelectorAll('.accept-btn').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const requestId = e.target.dataset.id;
+                        await handleRequestAction(requestId, 'accept');
+                    });
+                });
+
+                document.querySelectorAll('.reject-btn').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const requestId = e.target.dataset.id;
+                        await handleRequestAction(requestId, 'reject');
+                    });
+                });
+
+            } catch (error) {
+                console.error('Error loading requests:', error);
+            }
+        }
+
+        async function handleRequestAction(requestId, action) {
+            try {
+                const response = await apiRequest(`/requests/${requestId}/${action}`, {
+                    method: 'POST'
+                });
+                
+                if (response.success) {
+                    showToast(`تم ${action === 'accept' ? 'قبول' : 'رفض'} الطلب بنجاح!`);
+                    await loadAdminRequests();
+                    await updateNotificationBadge();
+                }
+            } catch (error) {
+                showToast('حدث خطأ في معالجة الطلب', true);
+            }
+        }
+
+        // Event Listeners
         const accountIcon = document.getElementById('accountIcon');
         const numbersIcon = document.getElementById('numbersIcon');
-        const notificationIcon = document.getElementById('notificationIcon');
         const accountModal = document.getElementById('accountModal');
         const numbersModal = document.getElementById('numbersModal');
-        const notificationsModal = document.getElementById('notificationsModal');
         const successModal = document.getElementById('successModal');
-        const closeAccountModal = document.getElementById('closeAccountModal');
-        const closeNumbersModal = document.getElementById('closeNumbersModal');
-        const closeNotificationsModal = document.getElementById('closeNotificationsModal');
-        const accountForm = document.getElementById('accountForm');
-        const numbersForm = document.getElementById('numbersForm');
-        const enableNotificationsBtn = document.getElementById('enableNotificationsBtn');
-        const chatIcon = document.getElementById('chatIcon');
-        const chatBox = document.getElementById('chatBox');
-        const chatInput = document.getElementById('chatInput');
-        const sendChatBtn = document.getElementById('sendChatBtn');
-        const chatMessages = document.getElementById('chatMessages');
-        const adminPanel = document.getElementById('adminPanel');
-        const sendMessageBtn = document.getElementById('sendMessageBtn');
-        const adminLoginBtn = document.getElementById('adminLoginBtn');
         const adminLoginModal = document.getElementById('adminLoginModal');
-        const adminLoginForm = document.getElementById('adminLoginForm');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const requestsContainer = document.getElementById('requestsContainer');
-        const notificationsList = document.getElementById('notificationsList');
+        const adminPanel = document.getElementById('adminPanel');
+        const adminLoginBtn = document.getElementById('adminLoginBtn');
+        const themeToggle = document.getElementById('themeToggle');
 
-        // Show modals
         accountIcon.addEventListener('click', () => accountModal.style.display = 'flex');
         numbersIcon.addEventListener('click', () => numbersModal.style.display = 'flex');
-        notificationIcon.addEventListener('click', () => {
-            notificationsModal.style.display = 'flex';
-            loadNotifications();
-        });
 
-        // Admin login button
         adminLoginBtn.addEventListener('click', () => {
             if (isAdminLoggedIn) {
-                showAdminPanel();
+                adminPanel.style.display = 'block';
             } else {
                 adminLoginModal.style.display = 'flex';
             }
         });
 
-        // Close modals
-        closeAccountModal.addEventListener('click', () => accountModal.style.display = 'none');
-        closeNumbersModal.addEventListener('click', () => numbersModal.style.display = 'none');
-        closeNotificationsModal.addEventListener('click', () => notificationsModal.style.display = 'none');
-
-        // Close modals when clicking outside
-        window.addEventListener('click', (e) => {
-            if (e.target === accountModal) accountModal.style.display = 'none';
-            if (e.target === numbersModal) numbersModal.style.display = 'none';
-            if (e.target === notificationsModal) notificationsModal.style.display = 'none';
-            if (e.target === successModal) successModal.style.display = 'none';
-            if (e.target === adminLoginModal) adminLoginModal.style.display = 'none';
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const icon = themeToggle.querySelector('i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                icon.classList.replace('fa-sun', 'fa-moon');
+            }
         });
 
-        // Admin login form
-        adminLoginForm.addEventListener('submit', (e) => {
+        document.getElementById('adminLoginForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const username = document.getElementById('adminUsername').value;
             const password = document.getElementById('adminPassword').value;
@@ -1071,7 +696,7 @@
             if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
                 isAdminLoggedIn = true;
                 adminLoginModal.style.display = 'none';
-                showAdminPanel();
+                adminPanel.style.display = 'block';
                 adminLoginBtn.innerHTML = '<i class="fas fa-cogs"></i> لوحة التحكم';
                 loadAdminRequests();
                 showToast('تم تسجيل الدخول بنجاح!');
@@ -1080,310 +705,91 @@
             }
         });
 
-        // Show admin panel
-        function showAdminPanel() {
-            adminPanel.style.display = 'block';
-            adminPanel.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // تحميل طلبات الأدمن
-        function loadAdminRequests() {
-            const requests = LOCAL_STORAGE.get('requests');
-            requestsContainer.innerHTML = '';
-
-            if (requests.length === 0) {
-                requestsContainer.innerHTML = '<p style="text-align: center; color: #777; padding: 20px;">لا توجد طلبات جديدة</p>';
-                return;
-            }
-
-            requests.forEach(request => {
-                const requestElement = document.createElement('div');
-                requestElement.className = 'request-item';
-                requestElement.innerHTML = `
-                    <div class="request-info">
-                        <strong>${request.name}</strong> - 
-                        ${request.type === 'account' ? 'طلب إنشاء حساب' : `طلب أرقام (${request.country})`}
-                        <br><small>${new Date(request.timestamp).toLocaleString('ar-EG')}</small>
-                        ${request.phone ? `<br><small>${request.phone}</small>` : ''}
-                        ${request.quantity ? `<br><small>الكمية: ${request.quantity}</small>` : ''}
-                        ${request.range ? `<br><small>الرينج: ${request.range}</small>` : ''}
-                    </div>
-                    <div class="request-actions">
-                        <button class="btn accept-btn" data-id="${request.id}" style="padding: 8px 15px; background: #2ecc71;">قبول</button>
-                        <button class="btn reject-btn" data-id="${request.id}" style="padding: 8px 15px; background: #e74c3c;">رفض</button>
-                    </div>
-                `;
-                requestsContainer.appendChild(requestElement);
-            });
-
-            // إضافة event listeners للأزرار
-            document.querySelectorAll('.accept-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const requestId = e.target.dataset.id;
-                    handleRequestAction(requestId, 'accept');
-                });
-            });
-
-            document.querySelectorAll('.reject-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const requestId = e.target.dataset.id;
-                    handleRequestAction(requestId, 'reject');
-                });
-            });
-        }
-
-        // معالجة إجراءات الطلبات
-        function handleRequestAction(requestId, action) {
-            const requests = LOCAL_STORAGE.get('requests');
-            const requestIndex = requests.findIndex(req => req.id === requestId);
-            
-            if (requestIndex === -1) {
-                showToast('الطلب غير موجود', true);
-                return;
-            }
-
-            const request = requests[requestIndex];
-            
-            if (action === 'accept') {
-                // إضافة إشعار بالقبول
-                LOCAL_STORAGE.add('notifications', {
-                    message: `تم قبول طلب ${request.name}`,
-                    type: 'success'
-                });
-                showToast('تم قبول الطلب بنجاح!');
-            } else {
-                // إضافة إشعار بالرفض
-                LOCAL_STORAGE.add('notifications', {
-                    message: `تم رفض طلب ${request.name}`,
-                    type: 'error'
-                });
-                showToast('تم رفض الطلب!');
-            }
-
-            // إزالة الطلب من القائمة
-            requests.splice(requestIndex, 1);
-            LOCAL_STORAGE.set('requests', requests);
-            
-            loadAdminRequests();
-            updateNotificationBadge();
-        }
-
-        // تحديث الإشعارات
-        function loadNotifications() {
-            const notifications = LOCAL_STORAGE.get('notifications');
-            notificationsList.innerHTML = '';
-
-            if (notifications.length === 0) {
-                notificationsList.innerHTML = '<p style="text-align: center; color: #777; padding: 20px;">لا توجد إشعارات</p>';
-                return;
-            }
-
-            notifications.forEach(notification => {
-                const notificationElement = document.createElement('div');
-                notificationElement.className = 'request-item';
-                notificationElement.innerHTML = `
-                    <div>
-                        <strong>${notification.message}</strong>
-                        <br><small>${new Date(notification.timestamp).toLocaleString('ar-EG')}</small>
-                    </div>
-                `;
-                notificationsList.appendChild(notificationElement);
-            });
-        }
-
-        // Logout functionality
-        logoutBtn.addEventListener('click', () => {
-            isAdminLoggedIn = false;
-            adminPanel.style.display = 'none';
-            adminLoginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> دخول الأدمن';
-            showToast('تم تسجيل الخروج بنجاح');
-        });
-
-        // Form submissions
-        accountForm.addEventListener('submit', (e) => {
+        document.getElementById('accountForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const userName = document.getElementById('userName').value;
             const userPhone = document.getElementById('userPhone').value;
             
-            // إضافة الطلب إلى التخزين
-            LOCAL_STORAGE.add('requests', {
-                type: 'account',
-                name: userName,
-                phone: userPhone
-            });
+            try {
+                await apiRequest('/requests', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        type: 'account',
+                        name: userName,
+                        phone: userPhone
+                    })
+                });
 
-            // إضافة إشعار جديد
-            LOCAL_STORAGE.add('notifications', {
-                message: `طلب جديد: ${userName} - إنشاء حساب`,
-                type: 'request'
-            });
-
-            accountModal.style.display = 'none';
-            successModal.style.display = 'flex';
-            
-            // تحديث البيانات
-            updateNotificationBadge();
-            if (isAdminLoggedIn) {
-                loadAdminRequests();
+                accountModal.style.display = 'none';
+                successModal.style.display = 'flex';
+                accountForm.reset();
+                
+                await updateNotificationBadge();
+                
+                setTimeout(() => {
+                    successModal.style.display = 'none';
+                }, 3000);
+            } catch (error) {
+                showToast('حدث خطأ في إرسال الطلب', true);
             }
-            
-            // Reset form
-            accountForm.reset();
-            
-            // Hide success modal after 3 seconds
-            setTimeout(() => {
-                successModal.style.display = 'none';
-            }, 3000);
         });
 
-        numbersForm.addEventListener('submit', (e) => {
+        document.getElementById('numbersForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const country = document.getElementById('country').value;
             const range = document.getElementById('range').value;
             const quantity = document.getElementById('quantity').value;
             const accountName = document.getElementById('accountName').value;
             
-            // إضافة الطلب إلى التخزين
-            LOCAL_STORAGE.add('requests', {
-                type: 'numbers',
-                name: accountName,
-                country: country,
-                quantity: parseInt(quantity),
-                range: range
-            });
-
-            // إضافة إشعار جديد
-            LOCAL_STORAGE.add('notifications', {
-                message: `طلب جديد: ${accountName} - أرقام (${country})`,
-                type: 'request'
-            });
-
-            numbersModal.style.display = 'none';
-            successModal.style.display = 'flex';
-            
-            // تحديث البيانات
-            updateNotificationBadge();
-            if (isAdminLoggedIn) {
-                loadAdminRequests();
-            }
-            
-            // Reset form
-            numbersForm.reset();
-            
-            // Hide success modal after 3 seconds
-            setTimeout(() => {
-                successModal.style.display = 'none';
-            }, 3000);
-        });
-
-        // Notifications
-        enableNotificationsBtn.addEventListener('click', () => {
-            showToast('تم تفعيل الإشعارات بنجاح!');
-            notificationsModal.style.display = 'none';
-        });
-
-        // Chat functionality
-        chatIcon.addEventListener('click', () => {
-            chatBox.style.display = chatBox.style.display === 'block' ? 'none' : 'block';
-        });
-
-        sendChatBtn.addEventListener('click', sendMessage);
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-
-        function sendMessage() {
-            const message = chatInput.value.trim();
-            if (message) {
-                const messageElement = document.createElement('div');
-                messageElement.style.marginBottom = '10px';
-                messageElement.style.padding = '10px';
-                messageElement.style.background = '#e3f2fd';
-                messageElement.style.borderRadius = '8px';
-                messageElement.textContent = message;
-                chatMessages.appendChild(messageElement);
-                chatInput.value = '';
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                
-                // إضافة رسالة الدعم إلى النظام
-                LOCAL_STORAGE.add('notifications', {
-                    message: `رسالة دعم جديدة: ${message}`,
-                    type: 'support'
+            try {
+                await apiRequest('/requests', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        type: 'numbers',
+                        name: accountName,
+                        country: country,
+                        quantity: parseInt(quantity),
+                        range: range
+                    })
                 });
+
+                numbersModal.style.display = 'none';
+                successModal.style.display = 'flex';
+                numbersForm.reset();
                 
-                updateNotificationBadge();
+                await updateNotificationBadge();
                 
-                // Simulate admin response after a delay
                 setTimeout(() => {
-                    const responseElement = document.createElement('div');
-                    responseElement.style.marginBottom = '10px';
-                    responseElement.style.padding = '10px';
-                    responseElement.style.background = '#f1f1f1';
-                    responseElement.style.borderRadius = '8px';
-                    responseElement.textContent = 'شكراً لتواصلكم، سنرد عليكم قريباً.';
-                    chatMessages.appendChild(responseElement);
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                }, 2000);
-            }
-        }
-
-        // Admin panel functionality
-        sendMessageBtn.addEventListener('click', () => {
-            const message = document.getElementById('adminMessage').value;
-            const schedule = document.getElementById('messageSchedule').value;
-            
-            if (message) {
-                // إضافة الرسالة إلى النظام
-                LOCAL_STORAGE.add('notifications', {
-                    message: `رسالة أدمن: ${message}`,
-                    type: 'admin',
-                    schedule: schedule
-                });
-                
-                showToast(`تم إرسال الرسالة بنجاح!${schedule ? '\nموعد الإرسال: ' + schedule : ''}`);
-                document.getElementById('adminMessage').value = '';
-                document.getElementById('messageSchedule').value = '';
-                updateNotificationBadge();
-            } else {
-                showToast('يرجى كتابة رسالة أولاً', true);
+                    successModal.style.display = 'none';
+                }, 3000);
+            } catch (error) {
+                showToast('حدث خطأ في إرسال الطلب', true);
             }
         });
 
-        // Animation on scroll
-        const observerOptions = {
-            threshold: 0.1
-        };
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            isAdminLoggedIn = false;
+            adminPanel.style.display = 'none';
+            adminLoginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> دخول الأدمن';
+            showToast('تم تسجيل الخروج بنجاح');
+        });
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
+        // Close modals
+        document.querySelectorAll('.close-modal').forEach(closeBtn => {
+            closeBtn.addEventListener('click', (e) => {
+                e.target.closest('.modal').style.display = 'none';
             });
-        }, observerOptions);
-
-        // Observe elements for animation
-        document.querySelectorAll('.feature-card, .hero-image, .hero-content').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(20px)';
-            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            observer.observe(el);
         });
 
-        // Initialize data when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            updateNotificationBadge();
-            
-            // Initialize empty arrays if they don't exist
-            if (!localStorage.getItem('requests')) {
-                LOCAL_STORAGE.set('requests', []);
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
             }
-            if (!localStorage.getItem('notifications')) {
-                LOCAL_STORAGE.set('notifications', []);
-            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            await updateNotificationBadge();
         });
     </script>
 </body>
